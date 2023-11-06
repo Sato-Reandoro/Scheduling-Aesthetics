@@ -18,34 +18,34 @@ import com.agendamento.crm.model.Procedimentos;
 import com.agendamento.crm.repository.ProcedimentosRepository;
 
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/procedimentos")
 public class ProcedimentoController {
 
 	@Autowired
 	private ProcedimentosRepository procedimentosRepository;
 	
-	@GetMapping("/procedimentos")
+	@GetMapping
 	public List<Procedimentos> listarProcedimentos() {
 		return procedimentosRepository.findAll();
 	}
 
-	@GetMapping("/procedimento/{id}")
+	@GetMapping("/procedimentos/{id}")
 	public Procedimentos listarProcedimentoUnico(@PathVariable(value="id") long id) {
 		return procedimentosRepository.findById(id);
 	}
 
-	@PostMapping("/procedimentos")
+	@PostMapping
 	@ResponseStatus(HttpStatus.CREATED)
 	public Procedimentos adicionarProcedimento (@RequestBody Procedimentos procedimentos) {
 		return procedimentosRepository.save(procedimentos);
 	}
 	
-	@DeleteMapping("/procedimentos")
+	@DeleteMapping
 	public void deletarProcedimento (@RequestBody Procedimentos procedimentos) {
 		procedimentosRepository.delete(procedimentos);
 	}
 	
-	@PutMapping("/procedimentos")
+	@PutMapping
 	public Procedimentos atualizarProcedimento (@RequestBody Procedimentos procedimentos) {
 		return procedimentosRepository.save(procedimentos);
 	}
