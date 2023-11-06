@@ -1,5 +1,12 @@
 package com.agendamento.crm.model;
 
+import java.util.Collection;
+import java.util.Collections;
+
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -7,7 +14,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 
 @Entity
-public class Funcionarios {
+public class Funcionarios implements UserDetails {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -43,6 +50,25 @@ public class Funcionarios {
     
 	@Column(nullable = false)
 	private String senha;
+	
+	
+	
+	// Implementação dos métodos da interface UserDetails
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        // Defina as permissões/roles apropriadas para funcionários
+        return Collections.singleton(new SimpleGrantedAuthority("ROLE_FUNCIONARIO"));
+    }
+
+    @Override
+    public String getPassword() {
+        return senha;
+    }
+
+    @Override
+    public String getUsername() {
+        return email; // Você pode usar email como nome de usuário, mas pode adaptar conforme necessário
+    }
 	
 	
     // Getters e Setters para todos os campos
@@ -142,5 +168,32 @@ public class Funcionarios {
     public void setSenha(String senha) {
         this.senha = senha;
     }
+
+	
+    
+    
+    @Override
+	public boolean isAccountNonExpired() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean isAccountNonLocked() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean isCredentialsNonExpired() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean isEnabled() {
+		// TODO Auto-generated method stub
+		return false;
+	}
     
 }

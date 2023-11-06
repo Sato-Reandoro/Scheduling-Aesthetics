@@ -1,6 +1,12 @@
 package com.agendamento.crm.model;
 
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
+
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -10,7 +16,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 
 @Entity
-public class Clientes {
+public class Clientes implements UserDetails {
 @Id
 @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -45,6 +51,23 @@ public class Clientes {
     private String telefone;
 
     
+    
+ /// Implementação dos métodos da interface UserDetails
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        // Defina as permissões/roles apropriadas para clientes
+        return Collections.singleton(new SimpleGrantedAuthority("ROLE_CLIENTE"));
+    }
+
+    @Override
+    public String getPassword() {
+        return senha;
+    }
+
+    @Override
+    public String getUsername() {
+        return email; // Use o email como nome de usuário
+    }
   
 
     // Getters e Setters para todos os campos
@@ -155,14 +178,33 @@ public class Clientes {
 	public void setTelefone(String telefone) {
 		this.telefone = telefone;
 	}
+
 	
-	public String getPassword() {
-	    return senha;
+	
+	
+	@Override
+	public boolean isAccountNonExpired() {
+		// TODO Auto-generated method stub
+		return false;
 	}
 
-
-	public String getUsername() {
-	    return this.nome;
+	@Override
+	public boolean isAccountNonLocked() {
+		// TODO Auto-generated method stub
+		return false;
 	}
+
+	@Override
+	public boolean isCredentialsNonExpired() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean isEnabled() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+	
 
 }

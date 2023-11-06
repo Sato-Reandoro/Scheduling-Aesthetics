@@ -1,12 +1,16 @@
 package com.agendamento.crm.model.user;
-import jakarta.persistence.*;
+import java.util.Collection;
+import java.util.Collections;
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import java.util.Collection;
-import java.util.List;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 
 @Table(name = "users")
 @Entity(name = "users")
@@ -15,13 +19,10 @@ public class Usuario implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private String id;
-    private String login;
-    private String senha;
+
     private UsuarioRole role;
 
     public Usuario(String login, String senha, UsuarioRole role){
-        this.login = login;
-        this.senha = senha;
         this.role = role;
     }
 
@@ -33,29 +34,6 @@ public class Usuario implements UserDetails {
 	public void setId(String id) {
 		this.id = id;
 	}
-
-
-	public String getLogin() {
-		return login;
-	}
-
-
-	public void setLogin(String login) {
-		this.login = login;
-	}
-
-
-
-	public String getSenha() {
-		return senha;
-	}
-
-
-
-	public void setSenha(String senha) {
-		this.senha = senha;
-	}
-
 
 	public UsuarioRole getRole() {
 		return role;
@@ -69,17 +47,29 @@ public class Usuario implements UserDetails {
 
 
 
+	  @Override
+	    public Collection<? extends GrantedAuthority> getAuthorities() {
+	        if (this.role == UsuarioRole.ADMIN) {
+	            // Defina as permissões/roles apropriadas para administradores
+	            return Collections.singleton(new SimpleGrantedAuthority("ROLE_ADMIN"));
+	        } else if (this.role == UsuarioRole.USUARIO_CLI) {
+	            // Defina as permissões/roles apropriadas para clientes
+	            return Collections.singleton(new SimpleGrantedAuthority("ROLE_CLIENTE"));
+	        } else if (this.role == UsuarioRole.USUARIO_FUN) {
+	            // Defina as permissões/roles apropriadas para funcionários
+	            return Collections.singleton(new SimpleGrantedAuthority("ROLE_FUNCIONARIO"));
+	        } else {
+	            // Defina outras permissões/roles, se necessário
+	            return Collections.singleton(new SimpleGrantedAuthority("ROLE_USUARIO"));
+	        }
+	    }
 
-	@Override
-    public Collection<? extends GrantedAuthority> getAuthorities() {
-        if(this.role == UsuarioRole.ADMIN) return List.of(new SimpleGrantedAuthority("ROLE_ADMIN"), new SimpleGrantedAuthority("ROLE_USUARIO"));
-        else return List.of(new SimpleGrantedAuthority("ROLE_USUARIO"));
-    }
-
-    @Override
-    public String getUsername() {
-        return login;
-    }
+	    @Override
+	    public String getUsername() {
+	        // Retorne o nome de usuário apropriado com base na sua lógica
+	        // Por exemplo, retorne o ID do usuário ou outro identificador exclusivo
+	        return id;
+	    }
 
     @Override
     public boolean isAccountNonExpired() {
