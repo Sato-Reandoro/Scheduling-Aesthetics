@@ -1,6 +1,8 @@
 package com.agendamento.crm.model;
 
 
+import org.hibernate.annotations.Type;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -20,8 +22,8 @@ public class AreasCorpo {
  public Long getId() {
      return id;
  }
-public void setId(int id) {
-	this.id = (long) id;
+public void setId(long id) {
+	this.id = id;
 }
 public String getNome() {
 	return nome;
@@ -29,8 +31,5 @@ public String getNome() {
 public void setNome(String nome) {
 	this.nome = nome;
 }
-public void setId(Long id2) {
-	// TODO Auto-generated method stub
-	
-}
+
 }

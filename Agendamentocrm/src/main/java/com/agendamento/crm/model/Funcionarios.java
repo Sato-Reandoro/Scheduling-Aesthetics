@@ -1,29 +1,60 @@
 package com.agendamento.crm.model;
 
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+
+@Entity
 public class Funcionarios {
-    private String nome; //obg
-    private String registroProfissional; //opc
-    private String cpf; //obg
-    private String cnpj; //opc
-    private String endereco; //obg
-    private String uf; //obg
-    private String cidade; //obg
-    private String bairro; //obg
-    private String celular; //obg
-    private String email; // obg
-    private String senha; // obg
-    private String userName;
+	
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Long id;
+	
+	@Column(nullable = false)
+    private String nome;
+	
+    private String registroProfissional;
     
-
-    public String getUserName() {
-        return userName;
-    }
-
-    public void setUserName(String userName) {
-        this.userName = userName;
-    }
-
+	@Column(nullable = false)
+    private String cpf;
+    
+	private String cnpj;
+    
+	@Column(nullable = false)
+	private String endereco;
+   
+	@Column(nullable = false)
+	private String uf;
+    
+	@Column(nullable = false)
+	private String cidade;
+    
+	@Column(nullable = false)
+	private String bairro;
+    
+	@Column(nullable = false)
+	private String telefone;
+    
+	@Column(nullable = false)
+	private String email;
+    
+	@Column(nullable = false)
+	private String senha;
+	
+	
     // Getters e Setters para todos os campos
+    
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
+	}
+	
     public String getNome() {
         return nome;
     }
@@ -88,12 +119,12 @@ public class Funcionarios {
         this.bairro = bairro;
     }
 
-    public String getCelular() {
-        return celular;
+    public String getTelefone() {
+        return telefone;
     }
 
-    public void setCelular(String celular) {
-        this.celular = celular;
+    public void setTelefone(String telefone) {
+        this.telefone = telefone;
     }
 
      public String getEmail() {
@@ -111,4 +142,5 @@ public class Funcionarios {
     public void setSenha(String senha) {
         this.senha = senha;
     }
+    
 }

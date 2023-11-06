@@ -9,4 +9,6 @@ import com.agendamento.crm.model.Procedimentos;
 public interface ProcedimentosRepository extends JpaRepository<Procedimentos, Long>{
 
 	Procedimentos findById(long id);
+
+	Procedimentos findByNome(String nomeProcedimento);
 }
