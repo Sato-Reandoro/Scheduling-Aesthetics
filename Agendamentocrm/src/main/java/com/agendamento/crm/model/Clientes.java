@@ -37,6 +37,8 @@ public class Clientes {
     @Column(nullable = false)
     private String telefone;
 
+    
+  
 
     // Getters e Setters para todos os campos
 
@@ -146,4 +148,14 @@ public class Clientes {
 	public void setTelefone(String telefone) {
 		this.telefone = telefone;
 	}
+	
+	public String getPassword() {
+	    return senha;
+	}
+
+
+	public String getUsername() {
+	    return this.nome;
+	}
+
 }
