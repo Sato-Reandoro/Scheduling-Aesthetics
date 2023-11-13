@@ -5,7 +5,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -36,21 +35,7 @@ public class FuncionarioController {
 		return funcionariosRepository.findById(id);
 	}
 	
-    @PostMapping
-    public ResponseEntity<?> adicionarFuncionario(@RequestBody Funcionarios funcionarios) {
-        // Verifica se o CPF é válido
-        if (!validarCpf(funcionarios.getCpf())) {
-            return ResponseEntity.badRequest().body("CPF inválido.");
-        }
-        // Valida a senha
-        if (!validarSenha(funcionarios.getSenha())) {
-            return ResponseEntity.badRequest().body("A senha deve ter pelo menos 8 caracteres, um caractere maiúsculo, um caractere minúsculo, um número e um caractere especial.");
-        }
-        // Salva o funcionário no banco de dados
-        funcionariosRepository.save(funcionarios);
-        return ResponseEntity.ok(funcionarios);
-        
-    }
+   
     
     @PutMapping("/{id}")
     public ResponseEntity<?> atualizarFuncionario(@PathVariable Long id, @RequestBody Funcionarios funcionarios) {
@@ -73,7 +58,7 @@ public class FuncionarioController {
             funcionarioAtualizado.setEndereco(funcionarios.getEndereco());
             funcionarioAtualizado.setBairro(funcionarios.getBairro());
             funcionarioAtualizado.setCidade(funcionarios.getCidade());
-            funcionarioAtualizado.setUf(funcionarios.getUf());
+            funcionarioAtualizado.setEstado(funcionarios.getEstado());
             if (funcionarios.getSenha() != null && !funcionarios.getSenha().isEmpty()) {
                 funcionarioAtualizado.setSenha(funcionarios.getSenha());
             }

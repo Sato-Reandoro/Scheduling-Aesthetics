@@ -27,7 +27,16 @@ public class Usuario implements UserDetails {
     }
 
     
-    public String getId() {
+   
+
+	public Usuario(String login, String senha, String role) {
+		// TODO Auto-generated constructor stub
+	}
+
+
+
+
+	public String getId() {
 		return id;
 	}
 

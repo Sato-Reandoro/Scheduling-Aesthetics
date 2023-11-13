@@ -13,4 +13,5 @@ public interface ClientesRepository extends JpaRepository<Clientes, Long> {
     Clientes findByCpf(String cpf);
     Clientes findByNome(String nomeCliente);
     Optional<Clientes> findById(Long id);
+	Object findByLogin(Object login);
 }

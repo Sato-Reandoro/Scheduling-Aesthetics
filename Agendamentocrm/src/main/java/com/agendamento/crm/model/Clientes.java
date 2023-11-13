@@ -8,6 +8,8 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import com.agendamento.crm.model.user.UsuarioRole;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -205,6 +207,20 @@ public class Clientes implements UserDetails {
 		// TODO Auto-generated method stub
 		return false;
 	}
+
+	public String getLogin() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	
+
+	public void setRole(UsuarioRole usuarioCli) {
+		// TODO Auto-generated method stub
+		
+	}
+
+
 	
 
 }
