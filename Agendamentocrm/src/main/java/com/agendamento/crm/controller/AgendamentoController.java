@@ -7,6 +7,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -62,48 +63,41 @@ public class AgendamentoController {
 	
 	@PostMapping
 	public ResponseEntity<?> criarAgendamento(@RequestBody AgendamentoRequest agendamentoRequest) {
-	    // Verifica se os valores de dataAgendamento e horaAgendamento não são nulos e não vazios
-		if (agendamentoRequest.getDataAgendamento() != null && agendamentoRequest.getHoraAgendamento() != null) {
-		 
-			DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-            DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HH:mm");
+	    if (agendamentoRequest.getDataAgendamento() != null && agendamentoRequest.getHoraAgendamento() != null) {
+	        DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+	        DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HH:mm");
 
-            // Obtém as datas e horas como strings
-            LocalDate dataAgendamentoStr = agendamentoRequest.getDataAgendamento();
-            LocalTime horaAgendamentoStr = agendamentoRequest.getHoraAgendamento();
+	        LocalDate dataAgendamentoStr = agendamentoRequest.getDataAgendamento();
+	        LocalTime horaAgendamentoStr = agendamentoRequest.getHoraAgendamento();
 
-	        // Obtém os nomes das entidades do request
 	        String nomeCliente = agendamentoRequest.getNomeCliente();
 	        String nomeFuncionario = agendamentoRequest.getNomeFuncionario();
 	        String nomeProcedimento = agendamentoRequest.getNomeProcedimento();
 	        String nomeAreaCorpo = agendamentoRequest.getNomeAreaCorpo();
 
-	        // Valida os nomes das entidades e busca as entidades correspondentes do banco de dados
 	        Clientes cliente = clientesRepository.findByNome(nomeCliente);
 	        Funcionarios funcionario = funcionariosRepository.findByNome(nomeFuncionario);
 	        Procedimentos procedimento = procedimentosRepository.findByNome(nomeProcedimento);
 	        AreasCorpo areaCorpo = areasCorpoRepository.findByNome(nomeAreaCorpo);
 
-	        // Verifica se as entidades foram encontradas
 	        if (cliente == null || funcionario == null || procedimento == null || areaCorpo == null) {
 	            return ResponseEntity.badRequest().body("Alguma das entidades não foi encontrada.");
 	        }
 
-	        // Agora você tem as entidades correspondentes com base nos nomes e pode criar o agendamento.
 	        Agendamento agendamento = new Agendamento();
 	        agendamento.setClientes(cliente);
-	        agendamento.setFuncionarios(funcionario);
-	        agendamento.setProcedimentos(procedimento);
-	        agendamento.setAreasCorpo(areaCorpo);
-	        LocalDate dataAgendamento = null;
-			agendamento.setDataAgendamento(dataAgendamento);
-	        LocalTime horaAgendamento = null;
-			agendamento.setHoraAgendamento(horaAgendamento);
+	        agendamento.setFuncionario(funcionario);
+	        agendamento.setProcedimentos(Set.of(procedimento)); // Usando Set.of para criar um conjunto com um único procedimento
+	        agendamento.setAreaCorpo(areaCorpo);
+	        agendamento.setDataAgendamento(dataAgendamentoStr);
+	        agendamento.setHoraAgendamento(horaAgendamentoStr);
+	        agendamento.setStatus("Agendado"); // Defina o status conforme necessário
+
+	        agendamentosRepository.save(agendamento);
 
 	        return ResponseEntity.ok("Agendamento criado com sucesso.");
-		}
-	        else {
+	    } else {
 	        return ResponseEntity.badRequest().body("Data e hora de agendamento não podem ser nulas ou vazias.");
 	    }
 	}
-		}
+}

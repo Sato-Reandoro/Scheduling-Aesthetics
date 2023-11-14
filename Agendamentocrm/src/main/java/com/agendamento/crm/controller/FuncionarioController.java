@@ -5,18 +5,27 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.agendamento.crm.controller.service.ClientesService;
+import com.agendamento.crm.controller.service.FuncionarioService;
+import com.agendamento.crm.model.Agendamento;
+import com.agendamento.crm.model.Clientes;
 import com.agendamento.crm.model.Funcionarios;
+import com.agendamento.crm.model.user.AgendamentoDTO;
 import com.agendamento.crm.repository.FuncionariosRepository;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import javax.validation.Valid;
 
 @RestController
 @RequestMapping("/funcionarios")
@@ -70,6 +79,48 @@ public class FuncionarioController {
             return ResponseEntity.notFound().build();
         }
     }
+    
+    
+    @PostMapping("/agendar-sessao")
+    public ResponseEntity agendarSessao(@RequestBody @Valid AgendamentoDTO agendamentoDTO) {
+    	 // 1. Verificação de Disponibilidade
+        boolean funcionarioDisponivel = FuncionarioService.verificarDisponibilidade(
+                agendamentoDTO.getIdFuncionario(),
+                agendamentoDTO.getDataProximaSessao()
+        );
+
+        if (!funcionarioDisponivel) {
+            return ResponseEntity.badRequest().body("Funcionário não está disponível na data solicitada.");
+        }
+
+        // 2. Verificação de Cliente Existente
+        Clientes cliente = ClientesService.findByCpf(agendamentoDTO.getCpfCliente());
+
+        if (cliente == null) {
+            return ResponseEntity.badRequest().body("Cliente não encontrado.");
+        }
+        
+     // 3. Criação do Agendamento
+        Agendamento agendamento = new Agendamento();
+        agendamento.setDataSessao(agendamentoDTO.getDataProximaSessao());
+        agendamento.setFuncionario(FuncionarioService.findById(agendamentoDTO.getIdFuncionario()));
+        agendamento.setCliente(cliente);
+
+        // Salve o agendamento no banco de dados
+        agendamentoService.save(agendamento);
+
+        // Use agendamentoDTO.getCpfCliente() e agendamentoDTO.getDataProximaSessao() para obter os dados
+
+        // Exemplo:
+        String cpfCliente = agendamentoDTO.getCpfCliente();
+        LocalDate dataProximaSessao = agendamentoDTO.getDataProximaSessao();
+
+        // Faça o que for necessário para agendar a sessão
+
+        return ResponseEntity.ok("Sessão agendada com sucesso!");
+    }
+
+    
     
     @DeleteMapping("/{id}")
     public ResponseEntity<?> removerFuncionario(@PathVariable Long id) {
