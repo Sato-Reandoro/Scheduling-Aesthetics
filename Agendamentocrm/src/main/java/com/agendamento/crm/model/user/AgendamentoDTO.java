@@ -2,18 +2,22 @@ package com.agendamento.crm.model.user;
 
 import java.time.LocalDate;
 
+
+
 public class AgendamentoDTO {
     private String cpfCliente;
     private LocalDate dataProximaSessao;
+    private String idFuncionario; // Adicione essa linha
 
     // Construtores, getters e setters
 
     public AgendamentoDTO() {
     }
 
-    public AgendamentoDTO(String cpfCliente, LocalDate dataProximaSessao) {
+    public AgendamentoDTO(String cpfCliente, LocalDate dataProximaSessao, String idFuncionario) {
         this.cpfCliente = cpfCliente;
         this.dataProximaSessao = dataProximaSessao;
+        this.idFuncionario = idFuncionario; // Adicione essa linha
     }
 
     // Getters e Setters
@@ -33,8 +37,11 @@ public class AgendamentoDTO {
         this.dataProximaSessao = dataProximaSessao;
     }
 
-	public Object getIdFuncionario() {
-		// TODO Auto-generated method stub
-		return null;
-	}
+    public String getIdFuncionario() {
+        return idFuncionario;
+    }
+
+    public void setIdFuncionario(String idFuncionario) {
+        this.idFuncionario = idFuncionario;
+    }
 }

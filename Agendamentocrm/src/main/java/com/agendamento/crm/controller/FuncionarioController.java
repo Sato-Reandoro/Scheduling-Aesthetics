@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.agendamento.crm.controller.service.AgendamentoService;
 import com.agendamento.crm.controller.service.ClientesService;
 import com.agendamento.crm.controller.service.FuncionarioService;
 import com.agendamento.crm.model.Agendamento;
@@ -33,6 +34,12 @@ public class FuncionarioController {
 
 	@Autowired
 	private FuncionariosRepository funcionariosRepository;
+	@Autowired
+    private FuncionarioService funcionarioService;
+    @Autowired
+	private ClientesService clientesService;
+    @Autowired
+	private AgendamentoService agendamentoService;
 	
 	@GetMapping
 	public List<Funcionarios> listarFuncionarios(){
@@ -82,9 +89,9 @@ public class FuncionarioController {
     
     
     @PostMapping("/agendar-sessao")
-    public ResponseEntity agendarSessao(@RequestBody @Valid AgendamentoDTO agendamentoDTO) {
-    	 // 1. Verificação de Disponibilidade
-        boolean funcionarioDisponivel = FuncionarioService.verificarDisponibilidade(
+    public ResponseEntity<String> agendarSessao(@RequestBody @Valid AgendamentoDTO agendamentoDTO) {
+        // 1. Verificação de Disponibilidade
+        boolean funcionarioDisponivel = funcionarioService.verificarDisponibilidade(
                 agendamentoDTO.getIdFuncionario(),
                 agendamentoDTO.getDataProximaSessao()
         );
@@ -93,17 +100,18 @@ public class FuncionarioController {
             return ResponseEntity.badRequest().body("Funcionário não está disponível na data solicitada.");
         }
 
-        // 2. Verificação de Cliente Existente
-        Clientes cliente = ClientesService.findByCpf(agendamentoDTO.getCpfCliente());
+     // 2. Verificação de Cliente Existente
+        Clientes cliente = clientesService.findByCpf(agendamentoDTO.getCpfCliente());
 
         if (cliente == null) {
             return ResponseEntity.badRequest().body("Cliente não encontrado.");
         }
+
         
      // 3. Criação do Agendamento
         Agendamento agendamento = new Agendamento();
         agendamento.setDataSessao(agendamentoDTO.getDataProximaSessao());
-        agendamento.setFuncionario(FuncionarioService.findById(agendamentoDTO.getIdFuncionario()));
+        agendamento.setFuncionario(funcionarioService.findByCpf(agendamentoDTO.getIdFuncionario()));
         agendamento.setCliente(cliente);
 
         // Salve o agendamento no banco de dados

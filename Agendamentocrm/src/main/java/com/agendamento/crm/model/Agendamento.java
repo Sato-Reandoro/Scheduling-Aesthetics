@@ -22,6 +22,8 @@ public class Agendamento {
 	
     private LocalDate dataAgendamento;
     
+    private LocalDate dataSessao;
+    
     private LocalTime horaAgendamento;
     
     private String status;
@@ -29,6 +31,10 @@ public class Agendamento {
     @ManyToOne
     @JoinColumn(name = "funcionario_id")
     private Funcionarios funcionario;
+    
+    @ManyToOne
+    @JoinColumn(name = "cliente_id")
+    private Clientes cliente;
     
     @ManyToOne
     private AreasCorpo areaCorpo;
@@ -48,6 +54,23 @@ public class Agendamento {
 	public Long getId() {
 		return id;
 	}
+	
+	 public LocalDate getDataSessao() {
+	        return dataSessao;
+	    }
+
+	    public void setDataSessao(LocalDate dataSessao) {
+	        this.dataSessao = dataSessao;
+	    }
+	    
+	    public Clientes getCliente() {
+	        return cliente;
+	    }
+
+	    public void setCliente(Clientes cliente) {
+	        this.cliente = cliente;
+	    }
+	
 
 	public void setId(Long id) {
 		this.id = id;
