@@ -42,7 +42,7 @@ public class SecurityConfigurations {
                 .requestMatchers(HttpMethod.DELETE, "/funcionario") .hasRole("ADMIN")
                 .requestMatchers(HttpMethod.DELETE, "/clientes").hasAnyRole("USUARIO_CLI, ADMIN")
                 .requestMatchers(HttpMethod.PUT, "/funcionarios").hasRole("ADMIN")
-                
+                .requestMatchers(HttpMethod.PUT, "/clientes").hasAnyRole("ADMIN, USUARIO_CLI")
                 .requestMatchers(HttpMethod.POST, "/funcionario/procedimentos").hasRole("USUARIO_FUN")
                 .requestMatchers(HttpMethod.POST, "/funcionario/disponibilidade").hasRole("USUARIO_FUN")
                 .requestMatchers(HttpMethod.GET, "/funcionario/disponibilidade").permitAll()
