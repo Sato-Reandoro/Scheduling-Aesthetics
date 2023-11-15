@@ -3,7 +3,8 @@ package com.agendamento.crm.model;
 import java.time.LocalDate;
 import java.time.LocalTime;
 
-import org.antlr.v4.runtime.misc.NotNull;
+import javax.validation.constraints.NotNull;
+
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 

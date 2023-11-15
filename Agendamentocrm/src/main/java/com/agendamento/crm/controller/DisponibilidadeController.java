@@ -3,7 +3,7 @@ package com.agendamento.crm.controller;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import org.springframework.beans.factory.annotation.Autowired;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -26,12 +26,11 @@ public class DisponibilidadeController {
 	
 	
 	
-    @Autowired
+    
     public DisponibilidadeController(DisponibilidadeService disponibilidadeService) {
         this.disponibilidadeService = disponibilidadeService;
     }
-    @Autowired
-    private DisponibilidadeMapper disponibilidadeMapper; // Certifique-se de que a classe DisponibilidadeMapper seja anotada com @Component ou similar
+  
 
     @GetMapping
     public ResponseEntity<List<DisponibilidadeDTO>> listarDisponibilidade() {
@@ -44,16 +43,23 @@ public class DisponibilidadeController {
 
 
     @PostMapping
-    public DisponibilidadeDTO criarDisponibilidade(@RequestBody DisponibilidadeDTO disponibilidadeDTO) {
-        // Converte o DTO para uma entidade Disponibilidade
-        Disponibilidade disponibilidade = mapToEntity(disponibilidadeDTO);
+    public ResponseEntity<?> criarDisponibilidade(@RequestBody DisponibilidadeDTO disponibilidadeDTO) {
+        try {
+            // Converte o DTO para uma entidade Disponibilidade
+            Disponibilidade disponibilidade = mapToEntity(disponibilidadeDTO);
 
-        // Salva a entidade no banco de dados
-        disponibilidade = disponibilidadeService.criarDisponibilidade(disponibilidadeDTO); // Passe o DisponibilidadeDTO
+            // Salva a entidade no banco de dados
+            disponibilidade = disponibilidadeService.criarDisponibilidade(disponibilidadeDTO);
 
-        // Converte a entidade de volta para um DTO e a retorna como resposta
-        return mapToDTO(disponibilidade);
+            // Converte a entidade de volta para um DTO e a retorna como resposta
+            DisponibilidadeDTO resultDTO = mapToDTO(disponibilidade);
+            return ResponseEntity.ok(resultDTO);
+        } catch (Exception e) {
+            // Em caso de falha, retorna uma resposta HTTP 400 Bad Request com a mensagem de erro
+            return ResponseEntity.badRequest().body("Falha ao criar a disponibilidade: " + e.getMessage());
+        }
     }
+
 
 
     private DisponibilidadeDTO mapToDTO(Disponibilidade disponibilidade) {

@@ -1,12 +1,9 @@
 package com.agendamento.crm.controller;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
-import java.util.Map;
-import java.util.Optional;
 import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -61,12 +58,11 @@ public class AgendamentoController {
 		return agendamentosRepository.findByFuncionario(funcionario);
 	}
 	
-	@PostMapping
+	@PostMapping("/criar-agendamento")
 	public ResponseEntity<?> criarAgendamento(@RequestBody AgendamentoRequest agendamentoRequest) {
 	    if (agendamentoRequest.getDataAgendamento() != null && agendamentoRequest.getHoraAgendamento() != null) {
-	        DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+ 	        DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 	        DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HH:mm");
-
 	        LocalDate dataAgendamentoStr = agendamentoRequest.getDataAgendamento();
 	        LocalTime horaAgendamentoStr = agendamentoRequest.getHoraAgendamento();
 

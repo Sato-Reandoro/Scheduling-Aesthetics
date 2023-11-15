@@ -19,6 +19,7 @@ import jakarta.persistence.OneToMany;
 
 @Entity
 public class Clientes implements UserDetails {
+	private static final long serialVersionUID = 1L;
 @Id
 @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

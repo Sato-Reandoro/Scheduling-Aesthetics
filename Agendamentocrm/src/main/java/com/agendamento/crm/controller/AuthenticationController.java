@@ -1,6 +1,21 @@
 package com.agendamento.crm.controller;
 
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+import javax.validation.Valid;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
 import com.agendamento.crm.infra.security.TokenService;
 import com.agendamento.crm.model.Admin;
 import com.agendamento.crm.model.Clientes;
@@ -13,34 +28,13 @@ import com.agendamento.crm.model.user.UsuarioRole;
 import com.agendamento.crm.repository.AdminRepository;
 import com.agendamento.crm.repository.ClientesRepository;
 import com.agendamento.crm.repository.FuncionariosRepository;
-import com.agendamento.crm.repository.UsuarioRepository;
-
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
-import javax.validation.Valid;
-
-
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.userdetails.User;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("auth")
 public class AuthenticationController {
     @Autowired
     private AuthenticationManager authenticationManager;
-    @Autowired
-    private UsuarioRepository usuarioRepository;
+
     @Autowired
     private ClientesRepository clientesRepository;
     @Autowired
@@ -50,14 +44,12 @@ public class AuthenticationController {
  
    
     @Autowired
-    private BCryptPasswordEncoder bCryptPasswordEncoder;
-    @Autowired
     private TokenService tokenService;
     
     
 
     @PostMapping("/login")
-    public ResponseEntity login(@RequestBody @Valid AuthenticationDTO data){
+    public ResponseEntity<LoginResponseDTO> login(@RequestBody @Valid AuthenticationDTO data){
         var usernamePassword = new UsernamePasswordAuthenticationToken(data.login(), data.senha());
         var auth = this.authenticationManager.authenticate(usernamePassword);
 
@@ -67,7 +59,7 @@ public class AuthenticationController {
     }
 
     @PostMapping("/register-client")
-    public ResponseEntity registerClient(@RequestBody @Valid RegisterRequest registerRequest) {
+    public ResponseEntity<String> registerClient(@RequestBody @Valid RegisterRequest registerRequest) {
         // Lógica de registro de clientes aqui
 
     	 // Verifica se já existe um cliente com o mesmo login
@@ -113,7 +105,8 @@ public class AuthenticationController {
         cliente.setSenha(encryptedPassword);
         
      // Crie um objeto User com base nos dados em registerRequest
-        Usuario newUser = new Usuario(cliente.getLogin(), cliente.getSenha(), "USUARIO_CLI");
+        Usuario newUser = new Usuario(cliente.getLogin(), cliente.getSenha(), UsuarioRole.USUARIO_CLI);
+
         
         
         // 4. Gere o token se necessário
@@ -123,11 +116,11 @@ public class AuthenticationController {
         clientesRepository.save(cliente);
         
         
-        return ResponseEntity.ok(cliente);
+        return ResponseEntity.ok("Cliente registrado com sucesso.");
     }
 
     @PostMapping("/register-employee")
-    public ResponseEntity registerEmployee(@RequestBody @Valid RegisterRequest registerRequest) {
+    public ResponseEntity<String> registerEmployee(@RequestBody @Valid RegisterRequest registerRequest) {
         // Lógica de registro de funcionários aqui
 
         if (funcionariosRepository.findByLogin(registerRequest.getLogin()) != null) {
@@ -171,18 +164,18 @@ public class AuthenticationController {
         // Valide os dados, gere o token, etc.
         
         // Crie um objeto User com base nos dados em registerRequest
-        Usuario newUser = new Usuario(funcionario.getLogin(), funcionario.getSenha(), "USUARIO_FUN");
+        Usuario newUser = new Usuario(funcionario.getLogin(), funcionario.getSenha(), UsuarioRole.USUARIO_FUN);
         
         
         // Salve o funcionário no banco de dados
         funcionariosRepository.save(funcionario);
 
-        return ResponseEntity.ok(funcionario);
+        return ResponseEntity.ok("Funcionário registrado com sucesso.");
     }
 
     
     @PostMapping("/register-admin")
-    public ResponseEntity registerAdmin(@RequestBody @Valid RegisterRequest registerRequest) {
+    public ResponseEntity<String> registerAdmin(@RequestBody @Valid RegisterRequest registerRequest) {
         // Lógica de registro de funcionários aqui
 
         if (AdminRepository.findByLogin(registerRequest.getLogin()) != null) {
@@ -224,13 +217,13 @@ public class AuthenticationController {
         // Valide os dados, gere o token, etc.
         
         // Crie um objeto User com base nos dados em registerRequest
-        Usuario newUser = new Usuario(admin.getLogin(), admin.getSenha(), "ADMIN");
+        Usuario newUser = new Usuario(admin.getLogin(), admin.getSenha(), UsuarioRole.ADMIN);
         
         
         // Salve o funcionário no banco de dados
         adminrepository.save(admin);
 
-        return ResponseEntity.ok(admin);
+        return ResponseEntity.ok("Funcionário registrado com sucesso.");
     }
     
     // Outros métodos e lógica aqui

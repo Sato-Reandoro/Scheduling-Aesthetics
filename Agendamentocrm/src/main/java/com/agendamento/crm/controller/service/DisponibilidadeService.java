@@ -1,6 +1,6 @@
 package com.agendamento.crm.controller.service;
 import java.util.NoSuchElementException;
-import org.springframework.beans.factory.annotation.Autowired;
+
 import org.springframework.stereotype.Service;
 import com.agendamento.crm.model.Disponibilidade;
 import com.agendamento.crm.model.Funcionarios;
@@ -21,7 +21,7 @@ public class DisponibilidadeService {
     private final FuncionariosRepository funcionarioRepository;
     private final ProcedimentosRepository procedimentoRepository;
 
-    @Autowired
+   
     public DisponibilidadeService(DisponibilidadeRepository disponibilidadeRepository, 
                                  DisponibilidadeMapper disponibilidadeMapper, 
                                  FuncionariosRepository funcionarioRepository, 

@@ -20,7 +20,7 @@ import com.agendamento.crm.model.Funcionarios;
 import com.agendamento.crm.model.user.AgendamentoDTO;
 import com.agendamento.crm.repository.FuncionariosRepository;
 
-import java.time.LocalDate;
+
 import java.util.List;
 import java.util.Optional;
 import java.util.regex.Matcher;
@@ -119,9 +119,7 @@ public class FuncionarioController {
 
         // Use agendamentoDTO.getCpfCliente() e agendamentoDTO.getDataProximaSessao() para obter os dados
 
-        // Exemplo:
-        String cpfCliente = agendamentoDTO.getCpfCliente();
-        LocalDate dataProximaSessao = agendamentoDTO.getDataProximaSessao();
+  
 
         // Faça o que for necessário para agendar a sessão
 

@@ -1,4 +1,5 @@
 package com.agendamento.crm.model.user;
+import java.io.Serializable;
 import java.util.Collection;
 import java.util.Collections;
 
@@ -15,24 +16,21 @@ import jakarta.persistence.Table;
 @Table(name = "users")
 @Entity(name = "users")
 
-public class Usuario implements UserDetails {
+public class Usuario implements UserDetails, Serializable {
+    private static final long serialVersionUID = 1L;
+
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private String id;
 
     private UsuarioRole role;
 
-    public Usuario(String login, String senha, UsuarioRole role){
+    public Usuario(String login, String senha, UsuarioRole role) {
         this.role = role;
     }
 
     
-   
-
-	public Usuario(String login, String senha, String role) {
-		// TODO Auto-generated constructor stub
-	}
-
+  
 
 
 

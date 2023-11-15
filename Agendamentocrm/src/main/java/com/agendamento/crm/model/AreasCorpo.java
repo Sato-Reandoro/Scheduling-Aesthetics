@@ -1,7 +1,7 @@
 package com.agendamento.crm.model;
 
 
-import org.hibernate.annotations.Type;
+
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
