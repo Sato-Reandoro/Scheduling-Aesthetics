@@ -27,19 +27,19 @@ public class AdminController {
 		@Autowired
 		private AdminRepository adminRepository;
 		
-		@GetMapping
+		@GetMapping("/listar")
 		public List<Admin> listarFuncionarios(){
 			return adminRepository.findAll();
 		}
 		
-		@GetMapping("/{id}")
+		@GetMapping("/listar/{id}")
 		public Admin listarAdminUnico(@PathVariable(value="id") long id) {
 			return adminRepository.findById(id);
 		}
 		
 	   
 	    
-	    @PutMapping("/{id}")
+	    @PutMapping("/atualizar/{id}")
 	    public ResponseEntity<?> atualizarAdmin(@PathVariable Long id, @RequestBody Admin admin) {
 	        Optional<Admin> adminExistente = adminRepository.findById(id);
 	        if (adminExistente.isPresent()) {
@@ -71,7 +71,7 @@ public class AdminController {
 	        }
 	    }
 	    
-	    @DeleteMapping("/{id}")
+	    @DeleteMapping("/apagar/{id}")
 	    public ResponseEntity<?> removerAdmin(@PathVariable Long id) {
 	        Optional<Admin> admin = adminRepository.findById(id);
 	        if (admin.isPresent()) {

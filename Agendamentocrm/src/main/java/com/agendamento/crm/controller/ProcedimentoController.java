@@ -24,28 +24,28 @@ public class ProcedimentoController {
 	@Autowired
 	private ProcedimentosRepository procedimentosRepository;
 	
-	@GetMapping
+	@GetMapping("/listar")
 	public List<Procedimentos> listarProcedimentos() {
 		return procedimentosRepository.findAll();
 	}
 
-	@GetMapping("/procedimentos/{id}")
+	@GetMapping("/listar/{id}")
 	public Procedimentos listarProcedimentoUnico(@PathVariable(value="id") long id) {
 		return procedimentosRepository.findById(id);
 	}
 
-	@PostMapping
+	@PostMapping("/criar-procedimentos")
 	@ResponseStatus(HttpStatus.CREATED)
 	public Procedimentos adicionarProcedimento (@RequestBody Procedimentos procedimentos) {
 		return procedimentosRepository.save(procedimentos);
 	}
 	
-	@DeleteMapping
+	@DeleteMapping("/apagar/{id}")
 	public void deletarProcedimento (@RequestBody Procedimentos procedimentos) {
 		procedimentosRepository.delete(procedimentos);
 	}
 	
-	@PutMapping
+	@PutMapping("/atualizar/{id}")
 	public Procedimentos atualizarProcedimento (@RequestBody Procedimentos procedimentos) {
 		return procedimentosRepository.save(procedimentos);
 	}

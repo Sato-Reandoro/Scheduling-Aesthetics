@@ -30,7 +30,7 @@ import com.agendamento.crm.repository.ClientesRepository;
 import com.agendamento.crm.repository.FuncionariosRepository;
 
 @RestController
-@RequestMapping("auth")
+@RequestMapping("/auth")
 public class AuthenticationController {
     @Autowired
     private AuthenticationManager authenticationManager;

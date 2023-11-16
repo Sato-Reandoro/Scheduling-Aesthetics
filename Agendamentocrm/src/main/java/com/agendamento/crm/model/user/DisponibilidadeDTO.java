@@ -16,6 +16,7 @@ public class DisponibilidadeDTO {
     private int capacidade;
     private Long clienteId;
     private String motivoCancelamento;
+    private Long areasCorpoId;
 
     // Getters e setters
 
@@ -99,13 +100,23 @@ public class DisponibilidadeDTO {
         this.motivoCancelamento = motivoCancelamento;
     }
     
-    public static DisponibilidadeDTO toDTO(Disponibilidade disponibilidade) {
+    
+    public Long getAreasCorpoId() {
+		return areasCorpoId;
+	}
+
+	public void setAreasCorpoId(Long areasCorpoId) {
+		this.areasCorpoId = areasCorpoId;
+	}
+
+	public static DisponibilidadeDTO toDTO(Disponibilidade disponibilidade) {
     	DisponibilidadeDTO dto = new DisponibilidadeDTO();
         dto.setId(disponibilidade.getId());
         dto.setDataHora(disponibilidade.getDataHora());
         dto.setDataFim(disponibilidade.getDataFim());
         dto.setFuncionarioId(disponibilidade.getFuncionario().getId());
         dto.setProcedimentoId(disponibilidade.getProcedimento().getId());
+        dto.setAreasCorpoId(disponibilidade.getAreasCorpo().getID());
 
         // Defina outros atributos do DTO aqui com base nos atributos da entidade.
 

@@ -31,11 +31,14 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.agendamento.crm.controller.service.ClientesService;
 import com.agendamento.crm.model.Clientes;
 import com.agendamento.crm.repository.ClientesRepository;
 
@@ -48,12 +51,12 @@ public class ClienteController {
 
     
 
-    @GetMapping
+    @GetMapping("/listar")
     public List<Clientes> listarClientes() {
         return clientesRepository.findAll();
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/listar/{id}")
     public ResponseEntity<Clientes> buscarCliente(@PathVariable Long id) {
         Optional<Clientes> cliente = clientesRepository.findById(id);
         if (cliente.isPresent()) {
@@ -63,7 +66,7 @@ public class ClienteController {
         }
     }
 
-    @PutMapping("/{id}")
+    @PutMapping("/atualizar/{id}")
     public ResponseEntity<?> atualizarCliente(@PathVariable Long id, @RequestBody Clientes cliente) {
         Optional<Clientes> clienteExistente = clientesRepository.findById(id);
         if (clienteExistente.isPresent()) {
@@ -99,7 +102,7 @@ public class ClienteController {
         }
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/apagar/{id}")
     public ResponseEntity<?> removerCliente(@PathVariable Long id) {
         Optional<Clientes> cliente = clientesRepository.findById(id);
         if (cliente.isPresent()) {
@@ -109,6 +112,21 @@ public class ClienteController {
             return ResponseEntity.notFound().build();
         }
     }
+    
+    @PostMapping("/apagar-conta")
+    public ResponseEntity<Object> apagarConta(@RequestParam Long id) {
+        Optional<Clientes> clienteOptional = ClientesService.getById(id);
+
+        if (clienteOptional.isPresent()) {
+            Clientes cliente = clienteOptional.get();
+            ClientesService.delete(cliente);
+            return ResponseEntity.ok().body("Conta excluída com sucesso.");
+        } else {
+            return ResponseEntity.badRequest().body("Cliente não encontrado.");
+        }
+    }
+
+    
     public static boolean validarCpf(String cpf) {
         cpf = cpf.replaceAll("[^0-9]", ""); // Remove caracteres não numéricos
         if (cpf.length() != 11) {

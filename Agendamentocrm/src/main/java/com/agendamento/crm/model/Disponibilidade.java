@@ -17,6 +17,9 @@ public class Disponibilidade {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+   
+    @ManyToOne
+    private AreasCorpo areasCorpo;
     
     @ManyToOne
     private Funcionarios funcionario; // Referência ao funcionário associado à disponibilidade
@@ -49,6 +52,17 @@ public class Disponibilidade {
 
 	public void setId(Long id) {
 		this.id = id;
+	}
+	
+
+	
+
+	public AreasCorpo getAreasCorpo() {
+		return areasCorpo;
+	}
+
+	public void setAreasCorpo(AreasCorpo areasCorpo) {
+		this.areasCorpo = areasCorpo;
 	}
 
 	public Funcionarios getFuncionario() {

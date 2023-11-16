@@ -2,15 +2,19 @@ package com.agendamento.crm.controller.service;
 import java.util.NoSuchElementException;
 
 import org.springframework.stereotype.Service;
+
+import com.agendamento.crm.model.AreasCorpo;
 import com.agendamento.crm.model.Disponibilidade;
 import com.agendamento.crm.model.Funcionarios;
 import com.agendamento.crm.model.Procedimentos;
 import com.agendamento.crm.model.user.DisponibilidadeDTO;
 import com.agendamento.crm.model.user.DisponibilidadeMapper;
+import com.agendamento.crm.repository.AreasCorpoRepository;
 import com.agendamento.crm.repository.DisponibilidadeRepository;
 import com.agendamento.crm.repository.FuncionariosRepository;
 import com.agendamento.crm.repository.ProcedimentosRepository;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -20,6 +24,7 @@ public class DisponibilidadeService {
     private final DisponibilidadeMapper disponibilidadeMapper;
     private final FuncionariosRepository funcionarioRepository;
     private final ProcedimentosRepository procedimentoRepository;
+    private AreasCorpoRepository areasCorpoRepository;
 
    
     public DisponibilidadeService(DisponibilidadeRepository disponibilidadeRepository, 
@@ -55,13 +60,35 @@ public class DisponibilidadeService {
     	// Valide e mapeie os dados do DTO para a entidade Disponibilidade
         Disponibilidade disponibilidade = disponibilidadeMapper.toEntity(disponibilidadeDTO);
 
+        // Verifique se a data da disponibilidade está dentro do intervalo permitido (até dois meses à frente)
+        LocalDateTime dataLimite = LocalDateTime.now().plusMonths(2);
+        if (disponibilidade.getDataHora().isAfter(dataLimite)) {
+            throw new IllegalArgumentException("A data da disponibilidade deve estar dentro do intervalo de até dois meses à frente.");
+        }
+        
+        // Verifique se há conflito com outra disponibilidade existente para o mesmo funcionário
+        List<Disponibilidade> disponibilidadesConflitantes = disponibilidadeRepository
+                .findAllByFuncionarioAndDataHoraBetween(
+                        disponibilidade.getFuncionario(),
+                        disponibilidade.getDataHora(),
+                        disponibilidade.getDataFim());
+
+        if (!disponibilidadesConflitantes.isEmpty()) {
+            throw new RuntimeException("Conflito de disponibilidade para o mesmo funcionário na mesma data e hora.");
+        }
+        
+     // Verifique se a área do corpo existe
+        AreasCorpo areaCorpo = areasCorpoRepository.findById(disponibilidadeDTO.getAreasCorpoId())
+                .orElseThrow(() -> new NoSuchElementException("Área do corpo não encontrada."));
+
+        // Associe a área do corpo à disponibilidade
+        disponibilidade.setAreasCorpo(areaCorpo);
 
         // Verifique se o funcionário e o procedimento existem
         Funcionarios funcionario = funcionarioRepository.findById(disponibilidade.getFuncionario().getId())
                 .orElseThrow(() -> new NoSuchElementException("Funcionário não encontrado."));
         Procedimentos procedimento = procedimentoRepository.findById(disponibilidade.getProcedimento().getId())
                 .orElseThrow(() -> new NoSuchElementException("Procedimento não encontrado."));
-
 
         // Defina o funcionário e procedimento na disponibilidade
         disponibilidade.setFuncionario(funcionario);
@@ -75,6 +102,8 @@ public class DisponibilidadeService {
         return disponibilidade;
     }
 
+    
+    
     public List<Disponibilidade> listarDisponibilidade() {
         return disponibilidadeRepository.findAll();
     }

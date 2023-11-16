@@ -31,5 +31,9 @@ public String getNome() {
 public void setNome(String nome) {
 	this.nome = nome;
 }
+public Long getID() {
+	// TODO Auto-generated method stub
+	return null;
+}
 
 }

@@ -41,19 +41,19 @@ public class FuncionarioController {
     @Autowired
 	private AgendamentoService agendamentoService;
 	
-	@GetMapping
+	@GetMapping("/listar")
 	public List<Funcionarios> listarFuncionarios(){
 		return funcionariosRepository.findAll();
 	}
 	
-	@GetMapping("/{id}")
+	@GetMapping("/listar/{id}")
 	public Funcionarios listarFuncionarioUnico(@PathVariable(value="id") long id) {
 		return funcionariosRepository.findById(id);
 	}
 	
    
     
-    @PutMapping("/{id}")
+    @PutMapping("/atualizar/{id}")
     public ResponseEntity<?> atualizarFuncionario(@PathVariable Long id, @RequestBody Funcionarios funcionarios) {
         Optional<Funcionarios> funcionarioExistente = funcionariosRepository.findById(id);
         if (funcionarioExistente.isPresent()) {
@@ -128,7 +128,7 @@ public class FuncionarioController {
 
     
     
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/apagar/{id}")
     public ResponseEntity<?> removerFuncionario(@PathVariable Long id) {
         Optional<Funcionarios> funcionarios = funcionariosRepository.findById(id);
         if (funcionarios.isPresent()) {

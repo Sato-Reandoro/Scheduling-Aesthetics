@@ -16,18 +16,18 @@ public class AreasCorpoController {
     @Autowired
     private AreasCorpoRepository areasCorpoRepository;
 
-    @PostMapping
+    @PostMapping("/criar-areas-corpo")
     public ResponseEntity<AreasCorpo> adicionarAreaCorpo(@RequestBody AreasCorpo areaCorpo) {
         AreasCorpo novaAreaCorpo = areasCorpoRepository.save(areaCorpo);
         return ResponseEntity.ok(novaAreaCorpo);
     }
 
-    @GetMapping
+    @GetMapping("/listar")
     public List<AreasCorpo> listarAreasCorpo() {
         return areasCorpoRepository.findAll();
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/listar/{id}")
     public ResponseEntity<AreasCorpo> buscarAreaCorpo(@PathVariable Long id) {
         Optional<AreasCorpo> areaCorpo = areasCorpoRepository.findById(id);
         if (areaCorpo.isPresent()) {
@@ -37,7 +37,7 @@ public class AreasCorpoController {
         }
     }
 
-    @PutMapping("/{id}")
+    @PutMapping("/atualizar/{id}")
     public ResponseEntity<AreasCorpo> atualizarAreaCorpo(@PathVariable Long id, @RequestBody AreasCorpo areaCorpo) {
         if (areasCorpoRepository.existsById(id)) {
             areaCorpo.setId(id);
@@ -48,7 +48,7 @@ public class AreasCorpoController {
         }
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/apagar/{id}")
     public ResponseEntity<?> removerAreaCorpo(@PathVariable Long id) {
         if (areasCorpoRepository.existsById(id)) {
             areasCorpoRepository.deleteById(id);

@@ -146,5 +146,10 @@ public class Agendamento {
 		// TODO Auto-generated method stub
 		
 	}
+
+	public Object getDataHoraConclusao() {
+		// TODO Auto-generated method stub
+		return null;
+	}
     
 }

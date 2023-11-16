@@ -4,13 +4,17 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -48,12 +52,12 @@ public class AgendamentoController {
 	@Autowired
 	private ProcedimentosRepository procedimentosRepository;
 	
-	@GetMapping("/todos")
+	@GetMapping("/listar")
 	public List<Agendamento> listarTodosAgendamentos(){
 		return agendamentosRepository.findAll();
 	}
 	
-	@GetMapping("/{funcionario}")
+	@GetMapping("/listar/funcionario")
 	public List<Agendamento> listarAgendamentoPorProfissional(@PathVariable Funcionarios funcionario){
 		return agendamentosRepository.findByFuncionario(funcionario);
 	}
@@ -96,4 +100,68 @@ public class AgendamentoController {
 	        return ResponseEntity.badRequest().body("Data e hora de agendamento não podem ser nulas ou vazias.");
 	    }
 	}
+	@PutMapping("/atualizar-agendamento/{id}")
+	public ResponseEntity<?> atualizarAgendamento(@PathVariable Long id, @RequestBody AgendamentoRequest agendamentoRequest) {
+	    Optional<Agendamento> agendamentoExistente = agendamentosRepository.findById(id);
+	    if (agendamentoExistente.isPresent()) {
+	        Agendamento agendamentoAtualizado = agendamentoExistente.get();
+
+	        // Lógica para validar e atualizar o agendamento
+	        if (agendamentoRequest.getDataAgendamento() != null && agendamentoRequest.getHoraAgendamento() != null) {
+	            // Atualize os campos conforme necessário
+	            agendamentoAtualizado.setDataAgendamento(agendamentoRequest.getDataAgendamento());
+	            agendamentoAtualizado.setHoraAgendamento(agendamentoRequest.getHoraAgendamento());
+	            agendamentoAtualizado.setStatus("NovoStatus");  // Substitua "NovoStatus" pelo status desejado
+	            // Adicione lógica de atualização para outros campos, se necessário
+	            String nomeAreaCorpo = agendamentoRequest.getNomeAreaCorpo();
+	            String nomeFuncionario = agendamentoRequest.getNomeFuncionario();
+	            String nomeProcedimento = agendamentoRequest.getNomeProcedimento();
+
+	            if (nomeAreaCorpo != null) {
+	                AreasCorpo areaCorpo = areasCorpoRepository.findByNome(nomeAreaCorpo);
+	                agendamentoAtualizado.setAreaCorpo(areaCorpo);
+	            }
+
+	            if (nomeFuncionario != null) {
+	                Funcionarios funcionario = funcionariosRepository.findByNome(nomeFuncionario);
+	                agendamentoAtualizado.setFuncionario(funcionario);
+	            }
+
+	            if (nomeProcedimento != null) {
+	                Procedimentos procedimento = procedimentosRepository.findByNome(nomeProcedimento);
+	                agendamentoAtualizado.setProcedimentos(Set.of(procedimento));
+	            }
+	            
+	            agendamentosRepository.save(agendamentoAtualizado);
+	            return ResponseEntity.ok("Agendamento atualizado com sucesso.");
+	        } else {
+	            return ResponseEntity.badRequest().body("Data e hora de agendamento não podem ser nulas ou vazias.");
+	        }
+	    } else {
+	        return ResponseEntity.notFound().build();
+	    }
+	}
+	    
+	
+	@DeleteMapping("/cancelar-agendamento/{id}")
+	public ResponseEntity<?> cancelarAgendamento(@PathVariable Long id) {
+	    Optional<Agendamento> agendamentoExistente = agendamentosRepository.findById(id);
+	    if (agendamentoExistente.isPresent()) {
+	        Agendamento agendamento = agendamentoExistente.get();
+	        // Verifica se o agendamento já foi concluído
+	        if (agendamento.getDataHoraConclusao() != null) {
+	            return ResponseEntity.badRequest().body("O agendamento já foi concluído e não pode ser cancelado.");
+	        }
+	        // Cancela o agendamento
+	        try {
+	            agendamentosRepository.deleteById(id);
+	            return ResponseEntity.ok("Agendamento cancelado com sucesso.");
+	        } catch (Exception e) {
+	            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Erro ao cancelar o agendamento: " + e.getMessage());
+	        }
+	    } else {
+	        return ResponseEntity.notFound().build();
+	    }
+	}
+	
 }
