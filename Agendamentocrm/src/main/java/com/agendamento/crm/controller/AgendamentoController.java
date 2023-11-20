@@ -81,7 +81,7 @@ public class AgendamentoController {
 	        String nomeAreaCorpo = agendamentoRequest.getNomeAreaCorpo();
 
 	        Clientes cliente = clientesRepository.findByNome(nomeCliente);
-	        Funcionarios funcionario = funcionariosRepository.findByNome(nomeFuncionario);
+	        Optional<Funcionarios> funcionario = funcionariosRepository.findByNome(nomeFuncionario);
 	        Procedimentos procedimento = procedimentosRepository.findByNome(nomeProcedimento);
 	        AreasCorpo areaCorpo = areasCorpoRepository.findByNome(nomeAreaCorpo);
 
@@ -136,7 +136,7 @@ public class AgendamentoController {
 	                }
 
 	                if (nomeFuncionario != null) {
-	                    Funcionarios funcionario = funcionariosRepository.findByNome(nomeFuncionario);
+	                    Optional<Funcionarios> funcionario = funcionariosRepository.findByNome(nomeFuncionario);
 	                    agendamentoAtualizado.setFuncionario(funcionario);
 	                }
 

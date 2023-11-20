@@ -3,6 +3,7 @@ package com.agendamento.crm.model;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.util.Optional;
 import java.util.Set;
 
 import jakarta.persistence.Entity;
@@ -151,6 +152,11 @@ public class Agendamento {
 	public Object getDataHoraConclusao() {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	public void setFuncionario(Optional<Funcionarios> funcionario2) {
+		// TODO Auto-generated method stub
+		
 	}
 
 	

@@ -59,6 +59,7 @@ public class Funcionarios implements UserDetails {
 	@Column(nullable = false)
 	private String telefone;
     
+	
 	@Column(nullable = false)
 	private String email;
     

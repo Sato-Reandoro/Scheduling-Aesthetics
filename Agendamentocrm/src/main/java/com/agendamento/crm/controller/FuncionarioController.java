@@ -52,7 +52,7 @@ public class FuncionarioController {
 	}
 	
 	@GetMapping("/listar/{id}")
-	public Funcionarios listarFuncionarioUnico(@PathVariable(value="id") long id) {
+	public Optional<Funcionarios> listarFuncionarioUnico(@PathVariable(value="id") long id) {
 		return funcionariosRepository.findById(id);
 	}
 	

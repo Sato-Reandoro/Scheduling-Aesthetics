@@ -1,8 +1,9 @@
 package com.agendamento.crm.model.user;
 
-import java.sql.Date;
+
 import java.time.LocalDateTime;
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 
 import com.agendamento.crm.model.Disponibilidade;

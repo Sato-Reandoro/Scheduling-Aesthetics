@@ -69,7 +69,7 @@ public class AuthenticationController {
         // Lógica de registro de clientes aqui
 
     	 // Verifica se já existe um cliente com o mesmo login
-        if (clientesRepository.findByLogin(registerRequest.getLogin()) != null) {
+        if (clientesRepository.findByEmail(registerRequest.getLogin()) != null) {
             return ResponseEntity.badRequest().body("Login já está em uso.");
         }
     	

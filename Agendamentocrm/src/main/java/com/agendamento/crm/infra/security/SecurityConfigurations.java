@@ -24,9 +24,10 @@ public class SecurityConfigurations {
 
     
     
-   @Bean
+    
+    @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
-        return httpSecurity
+        httpSecurity
             .csrf(csrf -> csrf.disable())
             .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
             .authorizeHttpRequests(authorize -> authorize
@@ -69,8 +70,9 @@ public class SecurityConfigurations {
                     .requestMatchers(HttpMethod.PUT, "/disponibilidade/atualizar-disponibilidade/{id}").hasRole("USUARIO_FUN")
                 .anyRequest().authenticated()
             )
-            .addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class)
-            .build();
+            .addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class);
+
+        return httpSecurity.build();
     }
 
 
