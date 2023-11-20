@@ -1,6 +1,7 @@
 package com.agendamento.crm.repository;
 
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -14,5 +15,5 @@ public interface AgendamentosRepository extends JpaRepository<Agendamento, Long>
 
 	List<Agendamento> findByFuncionarioAndDataAgendamento(Funcionarios funcionario, LocalDate dataAgendamento);
 
-	
+	boolean existsByDataAgendamentoAndHoraAgendamento(LocalDate localDate, LocalTime localTime);
 }

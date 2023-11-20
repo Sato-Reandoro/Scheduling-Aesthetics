@@ -2,6 +2,9 @@ package com.agendamento.crm.model;
 
 import java.util.Collection;
 import java.util.Collections;
+import java.util.HashSet;
+import java.util.Set;
+import jakarta.persistence.*;
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -12,6 +15,8 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinTable;
+import jakarta.persistence.ManyToMany;
 
 @Entity
 public class Funcionarios implements UserDetails {
@@ -20,6 +25,14 @@ public class Funcionarios implements UserDetails {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
+	
+	@ManyToMany
+    @JoinTable(
+        name = "funcionarios_procedimentos",
+        joinColumns = @JoinColumn(name = "funcionario_id"),
+        inverseJoinColumns = @JoinColumn(name = "procedimento_id")
+    )
+    private Set<Procedimentos> procedimentos = new HashSet<>();
 	
 	@Column(nullable = false)
     private String nome;
@@ -51,6 +64,8 @@ public class Funcionarios implements UserDetails {
     
 	@Column(nullable = false)
 	private String senha;
+	
+	 private String idCalendario;
 	
 	
 	
@@ -170,7 +185,14 @@ public class Funcionarios implements UserDetails {
         this.senha = senha;
     }
 
-	
+    public String getIdCalendario() {
+        return idCalendario;
+    }
+
+    public void setIdCalendario(String idCalendario) {
+        this.idCalendario = idCalendario;
+    }
+
     
     
     @Override

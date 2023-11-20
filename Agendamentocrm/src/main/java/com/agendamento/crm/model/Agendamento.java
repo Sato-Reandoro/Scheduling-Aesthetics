@@ -1,6 +1,7 @@
 package com.agendamento.crm.model;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.Set;
 
@@ -22,7 +23,7 @@ public class Agendamento {
 	
     private LocalDate dataAgendamento;
     
-    private LocalDate dataSessao;
+    private LocalDateTime dataSessao;
     
     private LocalTime horaAgendamento;
     
@@ -55,11 +56,11 @@ public class Agendamento {
 		return id;
 	}
 	
-	 public LocalDate getDataSessao() {
+	 public LocalDateTime getDataSessao() {
 	        return dataSessao;
 	    }
 
-	    public void setDataSessao(LocalDate dataSessao) {
+	    public void setDataSessao(LocalDateTime dataSessao) {
 	        this.dataSessao = dataSessao;
 	    }
 	    
@@ -151,5 +152,6 @@ public class Agendamento {
 		// TODO Auto-generated method stub
 		return null;
 	}
-    
+
+	
 }

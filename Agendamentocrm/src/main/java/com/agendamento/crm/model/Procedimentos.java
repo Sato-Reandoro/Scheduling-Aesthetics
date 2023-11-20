@@ -1,6 +1,8 @@
 package com.agendamento.crm.model;
 
+import java.util.HashSet;
 import java.util.Set;
+
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -18,6 +20,9 @@ public class Procedimentos {
 	
     @ManyToMany(mappedBy = "procedimentos")
     private Set<Agendamento> agendamentos;
+    
+    @ManyToMany(mappedBy = "procedimentos")
+    private Set<Funcionarios> funcionarios = new HashSet<>();
     
 	@Column(nullable = false)
     private String nome;

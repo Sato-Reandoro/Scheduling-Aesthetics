@@ -2,13 +2,15 @@ package com.agendamento.crm.model.user;
 
 import java.sql.Date;
 import java.time.LocalDateTime;
+import java.util.Collections;
+import java.util.List;
 
 import com.agendamento.crm.model.Disponibilidade;
 
 public class DisponibilidadeDTO {
     private Long id;
     private Long funcionarioId;
-    private Long procedimentoId;
+    private List<Long> procedimentoIds;
     private LocalDateTime dataHora;
     private Date dataFim;
     private String status;
@@ -16,7 +18,7 @@ public class DisponibilidadeDTO {
     private int capacidade;
     private Long clienteId;
     private String motivoCancelamento;
-    private Long areasCorpoId;
+    
 
     // Getters e setters
 
@@ -36,12 +38,12 @@ public class DisponibilidadeDTO {
         this.funcionarioId = funcionarioId;
     }
 
-    public Long getProcedimentoId() {
-        return procedimentoId;
+    public List<Long> getProcedimentoId() {
+        return procedimentoIds;
     }
 
-    public void setProcedimentoId(Long procedimentoId) {
-        this.procedimentoId = procedimentoId;
+    public void setProcedimentoId(List<Long> procedimentoId) {
+        this.procedimentoIds = procedimentoId;
     }
 
     public LocalDateTime getDataHora() {
@@ -101,13 +103,6 @@ public class DisponibilidadeDTO {
     }
     
     
-    public Long getAreasCorpoId() {
-		return areasCorpoId;
-	}
-
-	public void setAreasCorpoId(Long areasCorpoId) {
-		this.areasCorpoId = areasCorpoId;
-	}
 
 	public static DisponibilidadeDTO toDTO(Disponibilidade disponibilidade) {
     	DisponibilidadeDTO dto = new DisponibilidadeDTO();
@@ -115,8 +110,8 @@ public class DisponibilidadeDTO {
         dto.setDataHora(disponibilidade.getDataHora());
         dto.setDataFim(disponibilidade.getDataFim());
         dto.setFuncionarioId(disponibilidade.getFuncionario().getId());
-        dto.setProcedimentoId(disponibilidade.getProcedimento().getId());
-        dto.setAreasCorpoId(disponibilidade.getAreasCorpo().getID());
+        dto.setProcedimentoId(Collections.singletonList(disponibilidade.getProcedimento().getId()));
+      
 
         // Defina outros atributos do DTO aqui com base nos atributos da entidade.
 

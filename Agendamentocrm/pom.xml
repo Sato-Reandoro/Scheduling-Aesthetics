@@ -23,6 +23,22 @@
         </dependency>
 		
 
+<dependency>
+    <groupId>com.google.api-client</groupId>
+    <artifactId>google-api-client</artifactId>
+    <version>1.32.1</version>
+</dependency>
+<dependency>
+    <groupId>com.google.oauth-client</groupId>
+    <artifactId>google-oauth-client-jetty</artifactId>
+    <version>1.32.1</version>
+     </dependency> 
+<dependency>
+    <groupId>com.google.apis</groupId>
+    <artifactId>google-api-services-calendar</artifactId>
+    <version>v3-rev20230825-2.0.0</version>
+</dependency>
+
        <dependency>
          <groupId>org.hibernate</groupId>
          <artifactId>hibernate-core</artifactId>

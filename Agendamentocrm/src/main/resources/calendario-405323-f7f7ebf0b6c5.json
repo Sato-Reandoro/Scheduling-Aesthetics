@@ -1,0 +1,13 @@
+{
+  "type": "service_account",
+  "project_id": "calendario-405323",
+  "private_key_id": "f7f7ebf0b6c552957ef6a1843b4f33e7c2da498c",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvgIBADANBgkqhkiG9w0BAQEFAASCBKgwggSkAgEAAoIBAQCTDFOm1xPy0ovt\nWRIMFpWeXGjqjlJ/t+lL9oQ5raqtojwiyqEcshk8TnNzd5mRhJTnwJmOdNzcnvNH\nfEZAY0gJqXCYdi+Wlun0g7zTb0YchPsacfCci14uyCBdWkSA7QW1MvZUKfaVN6Ze\nJfogoncXmZJ6VEUpeeIBBRhirfpIUdYA6errQrZwM2WF+ZYIAi6XipkVfMICc/2+\n+U3m6gFBBl97V6pvKJDaNYW4qopAHdgxOaAi4QVaJWMZO6nnZos9wffO1qMuABpo\ncADFDdeqoaAvCkiHy8bmkuvZ3Vgp7JPm4aKcL8Bck9/XNImx4ZZo07O+VLkiBYz0\nmcYPl3slAgMBAAECggEAEjDWMFovAj0ASQ5ZvdvACo/NUtGPFx794gMkUaulj5v1\nldWR9Lt7hQsCG+inEL9hWay+fPGsA4bjpZY+wpGwRFxiV29XbROiQY4CeqLV/jUy\niGT2qlxQpwzkJBLvTTEFIb36Mb3h3o0R1wJvskB8PGknxluiaq0Z7kezv+ax2DxH\nafpI/Kxm8r4+n+F10mYt9FTxe+8IjjqOMYjhjmfGzbld5Mr44m9WBj2qRmXNr3Lb\n2LFxSv3tcoH8FJgw5tnzuUUauzfSBMIfizA/uX+EzuFfMx/OUN/nPrcKNSNUehgG\nsQChSHdmvFl6M66Nj/f+I5LUs/0dUvRfcJ6yBT/AyQKBgQDJK3I+pglJnzHXodnV\nyz4OhRcLve+haN62hGexBfndOD5I9nuzGQKS0kqkAkXwS8ENdWbNfKvKwr4IohT5\nH057pTZrP0qTj7MLKMb2xZIgDrdmCpxbRJt9ujBYyQ5FpapsRvcRhhWenvN9p8Ws\nZmAD6ZWnoTA/40wb6UUIXA88pwKBgQC7IJDG+YtownF7FrTn7Dmu8w6j0VXf1ByU\ngPifXTj7FcO+FEBuZeiX58Lz8MkjSw3PZmviZxRwUhR6fJLdsT9zNlZqozZYRI55\n6g2HPN7bd5ixx6seT4R8VB7C7ga+OdlBIH7cf4ZA3KCz89XOX9r41tNaRWBil5GZ\nzz9aqJfHUwKBgQCGzYJE0OYwW2j+4goi5Yq0GCMVTzWgp7F2BMunKCYDQ4kZQ3Io\n1X2P/TLfLFbJazn2VtGIqR5FRLIq/tGnDn99A3yv6T2EHCsSM0UAX+xHZxUmX73e\nut6nJXj4ReI2cYj9/Z/aMkuSe1kWvrILkJ6OgJw0NCMs7Jc3rN0BeQ8MyQKBgQCR\n7xW5d0e3jVy+57hx3pIl1Dwomcrk4iDf160Na8BSYGjlRhnxftxkC0TIxZG3SoMc\nqf2c9VLFPd3moFxRNDgNe+TtCRgKwnxyq4udWmVatuyISPU0kEL8SwYqc0Mi+y5p\nUhRdlb53uxhA/vpRFgRJaBAwKEbA3P+Z+jyoUS79LQKBgFyjrNMLRV0pZj/IQIzu\n0pcrzO9iHuZNn6dklAZET/XLiJuU8geBtvg1CR3h9eYizv6/6HbLA3FiLIv9ACU4\nhAQctdqceXOga8okyJeko6spubTBw1jZIMtlf2M0tjSm+PY+/0HiasxXVvlP4C+N\n3/Hyo823BNINIuYUa1MViJeq\n-----END PRIVATE KEY-----\n",
+  "client_email": "my-spring-boot-application@calendario-405323.iam.gserviceaccount.com",
+  "client_id": "109948627054612051568",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/my-spring-boot-application%40calendario-405323.iam.gserviceaccount.com",
+  "universe_domain": "googleapis.com"
+}

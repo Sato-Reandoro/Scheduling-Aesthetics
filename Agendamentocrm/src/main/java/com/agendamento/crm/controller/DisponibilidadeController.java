@@ -1,10 +1,11 @@
 package com.agendamento.crm.controller;
 
 import java.time.LocalDateTime;
+import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
-
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,7 +19,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.agendamento.crm.controller.service.DisponibilidadeService;
-import com.agendamento.crm.model.AreasCorpo;
 import com.agendamento.crm.model.Disponibilidade;
 import com.agendamento.crm.model.Funcionarios;
 import com.agendamento.crm.model.Procedimentos;
@@ -35,9 +35,9 @@ public class DisponibilidadeController {
     
 	private final DisponibilidadeService disponibilidadeService;
     private final DisponibilidadeRepository disponibilidadeRepository;
-    private final AreasCorpoRepository areasCorpoRepository;
     private final FuncionariosRepository funcionarioRepository;
     private final ProcedimentosRepository procedimentoRepository;
+  
 
     // Injete os serviços necessários, como o serviço para gerenciar a disponibilidade dos funcionários
     public DisponibilidadeController(
@@ -49,7 +49,6 @@ public class DisponibilidadeController {
 
         this.disponibilidadeService = disponibilidadeService;
         this.disponibilidadeRepository = disponibilidadeRepository;
-        this.areasCorpoRepository = areasCorpoRepository;
         this.funcionarioRepository = funcionarioRepository;
         this.procedimentoRepository = procedimentoRepository;
     }
@@ -64,12 +63,11 @@ public class DisponibilidadeController {
     }
 
 
-    @PostMapping("/criar-disponibilidade")
-    public ResponseEntity<?> criarDisponibilidade(@RequestBody DisponibilidadeDTO disponibilidadeDTO) {
+    @PostMapping("/gerenciar-disponibilidade")
+    public ResponseEntity<?> gerenciarDisponibilidade(@RequestBody DisponibilidadeDTO disponibilidadeDTO) {
         try {
-        	// Valide e mapeie os dados do DTO para a entidade Disponibilidade
-        	Disponibilidade novaDisponibilidade = new DisponibilidadeMapper().toEntity(disponibilidadeDTO);
-
+            // Valide e mapeie os dados do DTO para a entidade Disponibilidade
+            Disponibilidade novaDisponibilidade = new DisponibilidadeMapper().toEntity(disponibilidadeDTO);
 
             // Verifique se a data da disponibilidade está dentro do intervalo permitido (até dois meses à frente)
             LocalDateTime dataLimite = LocalDateTime.now().plusMonths(2);
@@ -94,28 +92,24 @@ public class DisponibilidadeController {
             Procedimentos procedimento = procedimentoRepository.findById(novaDisponibilidade.getProcedimento().getId())
                     .orElseThrow(() -> new NoSuchElementException("Procedimento não encontrado."));
 
-            // Verifique se a área do corpo existe
-            AreasCorpo areaCorpo = areasCorpoRepository.findById(disponibilidadeDTO.getAreasCorpoId())
-                    .orElseThrow(() -> new NoSuchElementException("Área do corpo não encontrada."));
-
-            // Associe a área do corpo à disponibilidade
-            novaDisponibilidade.setAreasCorpo(areaCorpo);
+           
 
             // Defina o funcionário e procedimento na disponibilidade
             novaDisponibilidade.setFuncionario(funcionario);
-            novaDisponibilidade.setProcedimento(procedimento);
+            novaDisponibilidade.setProcedimentos(new HashSet<>(Collections.singletonList(procedimento)));
 
             // Outras validações e lógica podem ser adicionadas aqui
 
             // Salve a disponibilidade no banco de dados
             novaDisponibilidade = disponibilidadeRepository.save(novaDisponibilidade);
 
-            return ResponseEntity.ok(novaDisponibilidade);
+            return ResponseEntity.ok("Operação de disponibilidade concluída com sucesso.");
         } catch (Exception e) {
             // Em caso de falha, retorna uma resposta HTTP 400 Bad Request com a mensagem de erro
-            return ResponseEntity.badRequest().body("Falha ao criar a disponibilidade: " + e.getMessage());
+            return ResponseEntity.badRequest().body("Falha na operação de disponibilidade: " + e.getMessage());
         }
     }
+
 
 
 

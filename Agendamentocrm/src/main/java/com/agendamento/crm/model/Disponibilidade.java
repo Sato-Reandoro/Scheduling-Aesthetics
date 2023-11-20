@@ -2,12 +2,18 @@ package com.agendamento.crm.model;
 
 import java.sql.Date;
 import java.time.LocalDateTime;
+import java.util.HashSet;
+import java.util.Set;
+import jakarta.persistence.*;
+
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinTable;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Temporal;
 import jakarta.persistence.TemporalType;
@@ -20,6 +26,14 @@ public class Disponibilidade {
    
     @ManyToOne
     private AreasCorpo areasCorpo;
+    
+    @ManyToMany
+    @JoinTable(
+        name = "disponibilidade_procedimentos",
+        joinColumns = @JoinColumn(name = "disponibilidade_id"),
+        inverseJoinColumns = @JoinColumn(name = "procedimento_id")
+    )
+    private Set<Procedimentos> procedimentos = new HashSet<>();
     
     @ManyToOne
     private Funcionarios funcionario; // Referência ao funcionário associado à disponibilidade
@@ -143,7 +157,13 @@ public class Disponibilidade {
 		return null;
 	}
 
-    // Getters e setters
+	public Set<Procedimentos> getProcedimentos() {
+        return procedimentos;
+    }
+
+    public void setProcedimentos(Set<Procedimentos> procedimentos) {
+        this.procedimentos = procedimentos;
+    }
     
     
 }

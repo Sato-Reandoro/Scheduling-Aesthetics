@@ -1,5 +1,7 @@
 package com.agendamento.crm.model.user;
 
+import java.util.Collections;
+
 import org.springframework.stereotype.Component;
 
 import com.agendamento.crm.model.Disponibilidade;
@@ -10,7 +12,7 @@ public class DisponibilidadeMapper {
         DisponibilidadeDTO dto = new DisponibilidadeDTO();
         dto.setId(disponibilidade.getId());
         dto.setFuncionarioId(disponibilidade.getFuncionario().getId());
-        dto.setProcedimentoId(disponibilidade.getProcedimento().getId());
+        dto.setProcedimentoId(Collections.singletonList(disponibilidade.getProcedimento().getId()));
         dto.setDataHora(disponibilidade.getDataHora());
         dto.setDataFim(disponibilidade.getDataFim());
         dto.setStatus(disponibilidade.getStatus());

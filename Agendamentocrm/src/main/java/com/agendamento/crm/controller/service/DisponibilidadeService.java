@@ -3,18 +3,21 @@ import java.util.NoSuchElementException;
 
 import org.springframework.stereotype.Service;
 
-import com.agendamento.crm.model.AreasCorpo;
+
 import com.agendamento.crm.model.Disponibilidade;
 import com.agendamento.crm.model.Funcionarios;
 import com.agendamento.crm.model.Procedimentos;
 import com.agendamento.crm.model.user.DisponibilidadeDTO;
 import com.agendamento.crm.model.user.DisponibilidadeMapper;
-import com.agendamento.crm.repository.AreasCorpoRepository;
+import com.agendamento.crm.repository.AgendamentosRepository;
 import com.agendamento.crm.repository.DisponibilidadeRepository;
 import com.agendamento.crm.repository.FuncionariosRepository;
 import com.agendamento.crm.repository.ProcedimentosRepository;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -24,17 +27,23 @@ public class DisponibilidadeService {
     private final DisponibilidadeMapper disponibilidadeMapper;
     private final FuncionariosRepository funcionarioRepository;
     private final ProcedimentosRepository procedimentoRepository;
-    private AreasCorpoRepository areasCorpoRepository;
+    private final AgendamentosRepository agendamentoRepository;
+    
+    
+ 
+ 
 
    
     public DisponibilidadeService(DisponibilidadeRepository disponibilidadeRepository, 
                                  DisponibilidadeMapper disponibilidadeMapper, 
                                  FuncionariosRepository funcionarioRepository, 
-                                 ProcedimentosRepository procedimentoRepository) {
+                                 ProcedimentosRepository procedimentoRepository,
+                                 AgendamentosRepository agendamentoRepository) {
         this.disponibilidadeRepository = disponibilidadeRepository;
         this.disponibilidadeMapper = disponibilidadeMapper;
         this.funcionarioRepository = funcionarioRepository;
         this.procedimentoRepository = procedimentoRepository;
+        this.agendamentoRepository = agendamentoRepository;
     }
 
     public List<DisponibilidadeDTO> listarDisponibilidades() {
@@ -77,37 +86,67 @@ public class DisponibilidadeService {
             throw new RuntimeException("Conflito de disponibilidade para o mesmo funcionário na mesma data e hora.");
         }
         
-     // Verifique se a área do corpo existe
-        AreasCorpo areaCorpo = areasCorpoRepository.findById(disponibilidadeDTO.getAreasCorpoId())
-                .orElseThrow(() -> new NoSuchElementException("Área do corpo não encontrada."));
-
-        // Associe a área do corpo à disponibilidade
-        disponibilidade.setAreasCorpo(areaCorpo);
 
         // Verifique se o funcionário e o procedimento existem
         Funcionarios funcionario = funcionarioRepository.findById(disponibilidade.getFuncionario().getId())
                 .orElseThrow(() -> new NoSuchElementException("Funcionário não encontrado."));
-        Procedimentos procedimento = procedimentoRepository.findById(disponibilidade.getProcedimento().getId())
-                .orElseThrow(() -> new NoSuchElementException("Procedimento não encontrado."));
+        
 
-        // Defina o funcionário e procedimento na disponibilidade
+     // Defina o funcionário na disponibilidade
         disponibilidade.setFuncionario(funcionario);
-        disponibilidade.setProcedimento(procedimento);
+
+     // Associe os procedimentos à disponibilidade
+        List<Procedimentos> procedimentos = procedimentoRepository.findAllById(disponibilidadeDTO.getProcedimentoId());
+        disponibilidade.setProcedimentos(new HashSet<>(procedimentos));
 
         // Outras validações e lógica podem ser adicionadas aqui
 
         // Salve a disponibilidade no banco de dados
         disponibilidade = disponibilidadeRepository.save(disponibilidade);
+   
 
         return disponibilidade;
     }
 
-    
+  
+      
     
     public List<Disponibilidade> listarDisponibilidade() {
         return disponibilidadeRepository.findAll();
     }
     
     
-    
+    public List<Disponibilidade> listarDisponibilidadesPorFuncionarioEData(Funcionarios funcionario, LocalDate data) {
+        return disponibilidadeRepository.findAllByFuncionarioAndDataHoraBetween(
+                funcionario,
+                data.atStartOfDay(),
+                data.plusDays(1).atStartOfDay()
+        );
+    }
+ // Método para verificar disponibilidade do funcionário
+    public boolean verificarDisponibilidade(Funcionarios funcionario, LocalDateTime dataHoraProximaSessao) {
+        // Consulta as disponibilidades do funcionário na data fornecida
+        List<Disponibilidade> disponibilidades = disponibilidadeRepository
+            .findAllByFuncionarioAndDataHoraBetween(
+                funcionario,
+                dataHoraProximaSessao,
+                dataHoraProximaSessao.plusDays(1)
+            );
+
+        // Se a lista de disponibilidades for nula, inicializa como uma lista vazia
+        disponibilidades = disponibilidades != null ? disponibilidades : new ArrayList<>();
+
+        // Outras lógicas de verificação, se necessário
+
+        // Verifica se existe alguma disponibilidade para o horário desejado
+        boolean disponibilidadeDisponivel = disponibilidades.stream().anyMatch(disponibilidade -> {
+            // Verifica se a disponibilidade está disponível e não está agendada
+            return disponibilidade.getStatus().equals("disponível") && !agendamentoRepository.existsByDataAgendamentoAndHoraAgendamento(
+                dataHoraProximaSessao.toLocalDate(),
+                dataHoraProximaSessao.toLocalTime()
+            );
+        });
+
+        return disponibilidadeDisponivel;
+    }
 }

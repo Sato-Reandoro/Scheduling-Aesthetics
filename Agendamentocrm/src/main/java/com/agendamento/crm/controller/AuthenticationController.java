@@ -29,6 +29,9 @@ import com.agendamento.crm.repository.AdminRepository;
 import com.agendamento.crm.repository.ClientesRepository;
 import com.agendamento.crm.repository.FuncionariosRepository;
 
+
+
+
 @RestController
 @RequestMapping("/auth")
 public class AuthenticationController {
@@ -39,6 +42,9 @@ public class AuthenticationController {
     private ClientesRepository clientesRepository;
     @Autowired
     private FuncionariosRepository funcionariosRepository;
+    @Autowired
+
+
   
     private AdminRepository adminrepository;
  
@@ -169,6 +175,8 @@ public class AuthenticationController {
         
         // Salve o funcionário no banco de dados
         funcionariosRepository.save(funcionario);
+        
+  
 
         return ResponseEntity.ok("Funcionário registrado com sucesso.");
     }

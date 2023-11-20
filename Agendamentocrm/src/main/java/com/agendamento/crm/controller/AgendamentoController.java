@@ -1,6 +1,7 @@
 package com.agendamento.crm.controller;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
@@ -28,6 +29,7 @@ import com.agendamento.crm.model.Procedimentos;
 import com.agendamento.crm.repository.AgendamentosRepository;
 import com.agendamento.crm.repository.AreasCorpoRepository;
 import com.agendamento.crm.repository.ClientesRepository;
+import com.agendamento.crm.repository.DisponibilidadeRepository;
 import com.agendamento.crm.repository.FuncionariosRepository;
 import com.agendamento.crm.repository.ProcedimentosRepository;
 
@@ -51,6 +53,9 @@ public class AgendamentoController {
 	
 	@Autowired
 	private ProcedimentosRepository procedimentosRepository;
+	
+	@Autowired
+	private DisponibilidadeRepository disponibilidadeRepository;
 	
 	@GetMapping("/listar")
 	public List<Agendamento> listarTodosAgendamentos(){
@@ -84,22 +89,28 @@ public class AgendamentoController {
 	            return ResponseEntity.badRequest().body("Alguma das entidades não foi encontrada.");
 	        }
 
-	        Agendamento agendamento = new Agendamento();
-	        agendamento.setClientes(cliente);
-	        agendamento.setFuncionario(funcionario);
-	        agendamento.setProcedimentos(Set.of(procedimento)); // Usando Set.of para criar um conjunto com um único procedimento
-	        agendamento.setAreaCorpo(areaCorpo);
-	        agendamento.setDataAgendamento(dataAgendamentoStr);
-	        agendamento.setHoraAgendamento(horaAgendamentoStr);
-	        agendamento.setStatus("Agendado"); // Defina o status conforme necessário
+	     // Verificar se existe uma disponibilidade para o funcionário no horário desejado
+	        if (disponibilidadeRepository.existsByFuncionarioAndDataHoraAndStatus(funcionario, LocalDateTime.of(dataAgendamentoStr, horaAgendamentoStr), "Disponível")) {
+	            Agendamento agendamento = new Agendamento();
+	            agendamento.setClientes(cliente);
+	            agendamento.setFuncionario(funcionario);
+	            agendamento.setProcedimentos(Set.of(procedimento)); // Usando Set.of para criar um conjunto com um único procedimento
+	            agendamento.setAreaCorpo(areaCorpo);
+	            agendamento.setDataAgendamento(dataAgendamentoStr);
+	            agendamento.setHoraAgendamento(horaAgendamentoStr);
+	            agendamento.setStatus("Agendado"); // Defina o status conforme necessário
 
-	        agendamentosRepository.save(agendamento);
+	            agendamentosRepository.save(agendamento);
 
-	        return ResponseEntity.ok("Agendamento criado com sucesso.");
+	            return ResponseEntity.ok("Agendamento criado com sucesso.");
+	        } else {
+	            return ResponseEntity.badRequest().body("Não há disponibilidade para o funcionário no horário desejado.");
+	        }
 	    } else {
 	        return ResponseEntity.badRequest().body("Data e hora de agendamento não podem ser nulas ou vazias.");
 	    }
 	}
+
 	@PutMapping("/atualizar-agendamento/{id}")
 	public ResponseEntity<?> atualizarAgendamento(@PathVariable Long id, @RequestBody AgendamentoRequest agendamentoRequest) {
 	    Optional<Agendamento> agendamentoExistente = agendamentosRepository.findById(id);
@@ -108,32 +119,37 @@ public class AgendamentoController {
 
 	        // Lógica para validar e atualizar o agendamento
 	        if (agendamentoRequest.getDataAgendamento() != null && agendamentoRequest.getHoraAgendamento() != null) {
-	            // Atualize os campos conforme necessário
-	            agendamentoAtualizado.setDataAgendamento(agendamentoRequest.getDataAgendamento());
-	            agendamentoAtualizado.setHoraAgendamento(agendamentoRequest.getHoraAgendamento());
-	            agendamentoAtualizado.setStatus("NovoStatus");  // Substitua "NovoStatus" pelo status desejado
-	            // Adicione lógica de atualização para outros campos, se necessário
-	            String nomeAreaCorpo = agendamentoRequest.getNomeAreaCorpo();
-	            String nomeFuncionario = agendamentoRequest.getNomeFuncionario();
-	            String nomeProcedimento = agendamentoRequest.getNomeProcedimento();
+	            // Verificar se existe uma disponibilidade para o funcionário no horário desejado
+	            if (disponibilidadeRepository.existsByFuncionarioAndDataHoraAndStatus(agendamentoAtualizado.getFuncionario(), LocalDateTime.of(agendamentoRequest.getDataAgendamento(), agendamentoRequest.getHoraAgendamento()), "Disponível")) {
+	                // Atualize os campos conforme necessário
+	                agendamentoAtualizado.setDataAgendamento(agendamentoRequest.getDataAgendamento());
+	                agendamentoAtualizado.setHoraAgendamento(agendamentoRequest.getHoraAgendamento());
+	                agendamentoAtualizado.setStatus("NovoStatus");  // Substitua "NovoStatus" pelo status desejado
+	                // Adicione lógica de atualização para outros campos, se necessário
+	                String nomeAreaCorpo = agendamentoRequest.getNomeAreaCorpo();
+	                String nomeFuncionario = agendamentoRequest.getNomeFuncionario();
+	                String nomeProcedimento = agendamentoRequest.getNomeProcedimento();
 
-	            if (nomeAreaCorpo != null) {
-	                AreasCorpo areaCorpo = areasCorpoRepository.findByNome(nomeAreaCorpo);
-	                agendamentoAtualizado.setAreaCorpo(areaCorpo);
-	            }
+	                if (nomeAreaCorpo != null) {
+	                    AreasCorpo areaCorpo = areasCorpoRepository.findByNome(nomeAreaCorpo);
+	                    agendamentoAtualizado.setAreaCorpo(areaCorpo);
+	                }
 
-	            if (nomeFuncionario != null) {
-	                Funcionarios funcionario = funcionariosRepository.findByNome(nomeFuncionario);
-	                agendamentoAtualizado.setFuncionario(funcionario);
-	            }
+	                if (nomeFuncionario != null) {
+	                    Funcionarios funcionario = funcionariosRepository.findByNome(nomeFuncionario);
+	                    agendamentoAtualizado.setFuncionario(funcionario);
+	                }
 
-	            if (nomeProcedimento != null) {
-	                Procedimentos procedimento = procedimentosRepository.findByNome(nomeProcedimento);
-	                agendamentoAtualizado.setProcedimentos(Set.of(procedimento));
+	                if (nomeProcedimento != null) {
+	                    Procedimentos procedimento = procedimentosRepository.findByNome(nomeProcedimento);
+	                    agendamentoAtualizado.setProcedimentos(Set.of(procedimento));
+	                }
+
+	                agendamentosRepository.save(agendamentoAtualizado);
+	                return ResponseEntity.ok("Agendamento atualizado com sucesso.");
+	            } else {
+	                return ResponseEntity.badRequest().body("Não há disponibilidade para o funcionário no horário desejado.");
 	            }
-	            
-	            agendamentosRepository.save(agendamentoAtualizado);
-	            return ResponseEntity.ok("Agendamento atualizado com sucesso.");
 	        } else {
 	            return ResponseEntity.badRequest().body("Data e hora de agendamento não podem ser nulas ou vazias.");
 	        }
