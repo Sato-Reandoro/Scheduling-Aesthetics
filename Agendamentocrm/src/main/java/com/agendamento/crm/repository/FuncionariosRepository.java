@@ -13,5 +13,4 @@ public interface FuncionariosRepository extends JpaRepository<Funcionarios, Long
     Optional<Funcionarios> findByCpf(String cpf);
     Optional<Funcionarios> findById(long id);
     Optional<Funcionarios> findByNome(String nomeFuncionario);
-	Object findByLogin(Object login);
 }
