@@ -67,11 +67,11 @@ public class AuthenticationController {
     @PostMapping("/register-client")
     public ResponseEntity<String> registerClient(@RequestBody @Valid RegisterRequest registerRequest) {
         // Lógica de registro de clientes aqui
+ 
+    	// Verifica se já existe um cliente com o mesmo login (email)
 
-    	 // Verifica se já existe um cliente com o mesmo login
-        if (clientesRepository.findByEmail(registerRequest.getLogin()) != null) {
-            return ResponseEntity.badRequest().body("Login já está em uso.");
-        }
+
+
     	
     	
         // 1. Crie um objeto Clientes com base nos dados em registerRequest
@@ -129,9 +129,6 @@ public class AuthenticationController {
     public ResponseEntity<String> registerEmployee(@RequestBody @Valid RegisterRequest registerRequest) {
         // Lógica de registro de funcionários aqui
 
-        if (funcionariosRepository.findByLogin(registerRequest.getLogin()) != null) {
-            return ResponseEntity.badRequest().body("Login já está em uso.");
-        }
     	
     	
         // Crie um objeto Funcionarios com base nos dados em registerRequest
