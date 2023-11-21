@@ -3,7 +3,6 @@ package com.agendamento.crm.controller;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
-import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -70,17 +69,15 @@ public class AgendamentoController {
 	@PostMapping("/criar-agendamento")
 	public ResponseEntity<?> criarAgendamento(@RequestBody AgendamentoRequest agendamentoRequest) {
 	    if (agendamentoRequest.getDataAgendamento() != null && agendamentoRequest.getHoraAgendamento() != null) {
- 	        DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-	        DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HH:mm");
 	        LocalDate dataAgendamentoStr = agendamentoRequest.getDataAgendamento();
 	        LocalTime horaAgendamentoStr = agendamentoRequest.getHoraAgendamento();
 
-	        String nomeCliente = agendamentoRequest.getNomeCliente();
+	        String cpfCliente = agendamentoRequest.getCpfCliente();
 	        String nomeFuncionario = agendamentoRequest.getNomeFuncionario();
 	        String nomeProcedimento = agendamentoRequest.getNomeProcedimento();
 	        String nomeAreaCorpo = agendamentoRequest.getNomeAreaCorpo();
 
-	        Clientes cliente = clientesRepository.findByNome(nomeCliente);
+	        Clientes cliente = clientesRepository.findByCpf(cpfCliente);
 	        Optional<Funcionarios> funcionario = funcionariosRepository.findByNome(nomeFuncionario);
 	        Procedimentos procedimento = procedimentosRepository.findByNome(nomeProcedimento);
 	        AreasCorpo areaCorpo = areasCorpoRepository.findByNome(nomeAreaCorpo);

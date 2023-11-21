@@ -9,7 +9,7 @@ import javax.validation.constraints.NotNull;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
 public class AgendamentoRequest {
-    private String nomeCliente;
+    private String cpfCliente;
     private String nomeFuncionario;
     private String nomeProcedimento;
     private String nomeAreaCorpo;
@@ -23,9 +23,6 @@ public class AgendamentoRequest {
     private LocalTime horaAgendamento;
 
     // Getters
-    public String getNomeCliente() {
-        return nomeCliente;
-    }
 
     public String getNomeFuncionario() {
         return nomeFuncionario;
@@ -46,4 +43,14 @@ public class AgendamentoRequest {
     public LocalTime getHoraAgendamento() {
         return horaAgendamento;
     }
+
+	public String getCpfCliente() {
+		return cpfCliente;
+	}
+
+	public void setCpfCliente(String cpfCliente) {
+		this.cpfCliente = cpfCliente;
+	}
+
+
 }

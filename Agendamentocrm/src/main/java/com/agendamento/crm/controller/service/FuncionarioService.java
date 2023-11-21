@@ -24,8 +24,6 @@ public class FuncionarioService {
     @Autowired
     private AgendamentosRepository agendamentosRepository;
 
-    @Autowired
-    private DisponibilidadeService disponibilidadeService;
     
     @Autowired
     private DisponibilidadeRepository disponibilidadeRepository;

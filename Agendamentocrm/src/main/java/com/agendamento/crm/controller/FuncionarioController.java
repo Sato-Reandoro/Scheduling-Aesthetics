@@ -97,7 +97,7 @@ public class FuncionarioController {
     public ResponseEntity<String> agendarSessao(@RequestBody @Valid AgendamentoDTO agendamentoDTO) {
         try {
             // Verificação de Disponibilidade
-            Funcionarios funcionario = funcionarioService.findByCpf(agendamentoDTO.getIdFuncionario());
+            Funcionarios funcionario = funcionarioService.findByNome(agendamentoDTO.getNomeFuncionario());
             LocalDateTime dataHoraAgendamento = agendamentoDTO.getDataProximaSessao();
 
             if (!disponibilidadeService.verificarDisponibilidade(funcionario, dataHoraAgendamento)) {

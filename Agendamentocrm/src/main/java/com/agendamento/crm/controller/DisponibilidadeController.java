@@ -114,21 +114,7 @@ public class DisponibilidadeController {
 
 
 
-    private DisponibilidadeDTO mapToDTO(Disponibilidade disponibilidade) {
-        DisponibilidadeDTO dto = new DisponibilidadeDTO();
-        dto.setId(disponibilidade.getId());
-        // Mapeie outros atributos da entidade para o DTO aqui
-
-        return dto;
-    }
-
-    private Disponibilidade mapToEntity(DisponibilidadeDTO disponibilidadeDTO) {
-        Disponibilidade disponibilidade = new Disponibilidade();
-        disponibilidade.setId(disponibilidadeDTO.getId());
-        // Mapeie outros atributos do DTO para a entidade aqui
-
-        return disponibilidade;
-    }
+  
  // ... Outras partes do código não alteradas ...
 
     @PutMapping("/atualizar-disponibilidade/{id}")

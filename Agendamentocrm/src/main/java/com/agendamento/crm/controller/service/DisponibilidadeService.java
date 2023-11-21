@@ -88,7 +88,7 @@ public class DisponibilidadeService {
         
 
         // Verifique se o funcionário e o procedimento existem
-        Funcionarios funcionario = funcionarioRepository.findById(disponibilidade.getFuncionario().getId())
+        Funcionarios funcionario = funcionarioRepository.findByNome(disponibilidade.getFuncionario().getNome())
                 .orElseThrow(() -> new NoSuchElementException("Funcionário não encontrado."));
         
 
