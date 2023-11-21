@@ -29,9 +29,9 @@ public class FuncionarioService {
     private DisponibilidadeRepository disponibilidadeRepository;
 
     // Método para verificar disponibilidade do funcionário por CPF
-    public boolean verificarDisponibilidade(String cpfFuncionario, LocalDate dataProximaSessao) {
+    public boolean verificarDisponibilidade(String nomeFuncionario, LocalDate dataProximaSessao) {
         // Busca o funcionário pelo CPF
-        Funcionarios funcionario = findByCpf(cpfFuncionario);
+        Funcionarios funcionario = findByNome(nomeFuncionario);
 
         
         if (funcionario == null) {
@@ -62,8 +62,8 @@ public class FuncionarioService {
     }
 
     // Método para buscar funcionário por CPF
-    public Funcionarios findByCpf(String cpf) {
-        return funcionariosRepository.findByCpf(cpf).orElse(null);
+    public Funcionarios findByNome(String Nome) {
+        return funcionariosRepository.findByNome(Nome).orElse(null);
     }
 
     private boolean verificarAgendamentoConflitante(List<Agendamento> agendamentos, LocalTime horario) {
@@ -73,5 +73,7 @@ public class FuncionarioService {
             agendamento.getHoraAgendamento().equals(horario)
         );
     }
+
+
 }
 

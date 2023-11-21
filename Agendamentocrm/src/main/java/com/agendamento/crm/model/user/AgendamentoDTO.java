@@ -8,7 +8,7 @@ import java.time.LocalDateTime;
 public class AgendamentoDTO {
     private String cpfCliente;
     private LocalDateTime dataProximaSessao;
-    private String idFuncionario; // Adicione essa linha
+    private String nomeFuncionario; // Adicione essa linha
 
     // Construtores, getters e setters
 
@@ -18,7 +18,7 @@ public class AgendamentoDTO {
     public AgendamentoDTO(String cpfCliente, LocalDateTime dataProximaSessao, String idFuncionario) {
         this.cpfCliente = cpfCliente;
         this.dataProximaSessao = dataProximaSessao;
-        this.idFuncionario = idFuncionario; // Adicione essa linha
+        this.nomeFuncionario = nomeFuncionario; // Adicione essa linha
     }
 
     // Getters e Setters
@@ -38,11 +38,13 @@ public class AgendamentoDTO {
         this.dataProximaSessao = dataProximaSessao;
     }
 
-    public String getIdFuncionario() {
-        return idFuncionario;
+    public String getNomeFuncionario() {
+        return nomeFuncionario;
     }
 
-    public void setIdFuncionario(String idFuncionario) {
-        this.idFuncionario = idFuncionario;
+    public void setNomeFuncionario(String nomeFuncionario) {
+        this.nomeFuncionario = nomeFuncionario;
     }
+
+
 }
