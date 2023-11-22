@@ -15,7 +15,7 @@ public class AgendamentoDTO {
     public AgendamentoDTO() {
     }
 
-    public AgendamentoDTO(String cpfCliente, LocalDateTime dataProximaSessao, String idFuncionario) {
+    public AgendamentoDTO(String cpfCliente, LocalDateTime dataProximaSessao, String nomeFuncionario) {
         this.cpfCliente = cpfCliente;
         this.dataProximaSessao = dataProximaSessao;
         this.nomeFuncionario = nomeFuncionario; // Adicione essa linha

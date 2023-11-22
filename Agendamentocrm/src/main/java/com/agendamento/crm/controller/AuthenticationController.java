@@ -56,7 +56,7 @@ public class AuthenticationController {
 
     @PostMapping("/login")
     public ResponseEntity<LoginResponseDTO> login(@RequestBody @Valid AuthenticationDTO data){
-        var usernamePassword = new UsernamePasswordAuthenticationToken(data.login(), data.senha());
+        var usernamePassword = new UsernamePasswordAuthenticationToken(data.email(), data.senha());
         var auth = this.authenticationManager.authenticate(usernamePassword);
 
         var token = tokenService.generateToken((Usuario) auth.getPrincipal());
@@ -111,7 +111,7 @@ public class AuthenticationController {
         cliente.setSenha(encryptedPassword);
         
      // Crie um objeto User com base nos dados em registerRequest
-        Usuario newUser = new Usuario(cliente.getLogin(), cliente.getSenha(), UsuarioRole.USUARIO_CLI);
+        Usuario newUser = new Usuario(cliente.getEmail(), cliente.getSenha(), UsuarioRole.USUARIO_CLI);
 
         
         
@@ -119,7 +119,7 @@ public class AuthenticationController {
         // Aqui você pode usar a lógica de geração de token, se aplicável
 
         // 5. Salve o cliente no banco de dados
-        clientesRepository.save(cliente);
+        this.clientesRepository.save(newUser);
         
         
         return ResponseEntity.ok("Cliente registrado com sucesso.");
@@ -171,7 +171,7 @@ public class AuthenticationController {
         
         
         // Salve o funcionário no banco de dados
-        funcionariosRepository.save(funcionario);
+        this.funcionariosRepository.save(newUser);
         
   
 
@@ -226,7 +226,7 @@ public class AuthenticationController {
         
         
         // Salve o funcionário no banco de dados
-        adminrepository.save(admin);
+        this.adminrepository.save(newUser);
 
         return ResponseEntity.ok("Funcionário registrado com sucesso.");
     }

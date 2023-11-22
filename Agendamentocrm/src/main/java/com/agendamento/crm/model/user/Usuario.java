@@ -9,12 +9,12 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-
 
 @Entity(name = "users")
 public class Usuario implements UserDetails, Serializable {
@@ -24,8 +24,8 @@ public class Usuario implements UserDetails, Serializable {
     @GeneratedValue(strategy = GenerationType.UUID)
     private String id;
 
-    @Column(name = "login")
-    private String login;
+    @Column(name = "email")
+    private String email;
 
     @Column(name = "senha")
     private String senha;
@@ -35,13 +35,13 @@ public class Usuario implements UserDetails, Serializable {
         // Construtor padrão necessário para JPA
     }
 
-    public Usuario(String login, String senha, UsuarioRole role) {
-        this.login = login;
+    public Usuario(String email, String senha, UsuarioRole role) {
+        this.email = email;
         this.senha = senha;
         this.role = role;
     }
 
-    // Getters e setters
+   
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -59,7 +59,7 @@ public class Usuario implements UserDetails, Serializable {
 
     @Override
     public String getUsername() {
-        return login;
+        return email;
     }
 
     @Override
@@ -87,8 +87,10 @@ public class Usuario implements UserDetails, Serializable {
         return true;
     }
 
-	public String getId() {
+	public String getEmail() {
 		// TODO Auto-generated method stub
 		return null;
 	}
+
+   
 }

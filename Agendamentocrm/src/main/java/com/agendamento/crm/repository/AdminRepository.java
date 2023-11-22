@@ -4,6 +4,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 import com.agendamento.crm.model.Admin;
+import com.agendamento.crm.model.user.Usuario;
 
 @Repository
 public interface AdminRepository extends JpaRepository<Admin, Long> {
@@ -15,4 +16,5 @@ static Object findByLogin(Object login) {
 	return null;
 	
 }
+void save(Usuario newUser);
 }
