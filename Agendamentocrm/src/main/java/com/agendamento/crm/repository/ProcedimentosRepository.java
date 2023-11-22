@@ -1,5 +1,7 @@
 package com.agendamento.crm.repository;
 
+import java.util.List;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -11,4 +13,6 @@ public interface ProcedimentosRepository extends JpaRepository<Procedimentos, Lo
 	Procedimentos findById(long id);
 
 	Procedimentos findByNome(String nomeProcedimento);
+
+	List<Procedimentos> findNome();
 }

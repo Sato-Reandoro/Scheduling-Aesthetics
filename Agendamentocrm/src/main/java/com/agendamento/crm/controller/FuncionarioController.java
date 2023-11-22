@@ -12,12 +12,16 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.agendamento.crm.controller.service.AgendamentoService;
+import com.agendamento.crm.controller.service.AreasCorpoService;
 import com.agendamento.crm.controller.service.ClientesService;
 import com.agendamento.crm.controller.service.DisponibilidadeService;
 import com.agendamento.crm.controller.service.FuncionarioService;
+import com.agendamento.crm.controller.service.procedimentoService;
 import com.agendamento.crm.model.Agendamento;
 import com.agendamento.crm.model.Clientes;
 import com.agendamento.crm.model.Funcionarios;
+import com.agendamento.crm.model.Procedimentos;
+import com.agendamento.crm.model.AreasCorpo;
 import com.agendamento.crm.model.user.AgendamentoDTO;
 import com.agendamento.crm.repository.FuncionariosRepository;
 
@@ -110,11 +114,23 @@ public class FuncionarioController {
                 return ResponseEntity.badRequest().body("Cliente não encontrado.");
             }
 
+            Procedimentos procedimento = procedimentoService.findByNome(agendamentoDTO.getProcedimento());
+            if (procedimento == null) {
+            	return ResponseEntity.badRequest().body("procedimento não encontrado");
+            }
+            
+            AreasCorpo areasCorpo = AreasCorpoService.findByNome(agendamentoDTO.getAreasCorpo());
+            if (areasCorpo == null) {
+            	return ResponseEntity.badRequest().body("Area do corpo não encontrada");
+            }
+            
             // Criação do Agendamento
             Agendamento agendamento = new Agendamento();
             agendamento.setDataSessao(dataHoraAgendamento);
             agendamento.setFuncionario(funcionario);
             agendamento.setCliente(cliente);
+            agendamento.setProcedimentos(procedimento);
+            agendamento.setAreasCorpo(areasCorpo);
 
             // Salva o agendamento no banco de dados
             agendamentoService.save(agendamento);
