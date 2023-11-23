@@ -3,6 +3,7 @@ package com.agendamento.crm.repository;
 import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import com.agendamento.crm.model.Procedimentos;
@@ -14,5 +15,6 @@ public interface ProcedimentosRepository extends JpaRepository<Procedimentos, Lo
 
 	Procedimentos findByNome(String nomeProcedimento);
 
-	List<Procedimentos> findNome();
+    @Query("SELECT p.nome FROM Procedimentos p")
+    List<Procedimentos> findNome();
 }
